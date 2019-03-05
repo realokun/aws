@@ -14,3 +14,7 @@ hooks:
     - location: scripts/start_server
       timeout: 300
       runas: root
+  ValidateService:
+    - location: scripts/test_web_app
+      timeout: 300
+      runas: root
