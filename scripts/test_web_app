@@ -3,7 +3,7 @@ success=0
 failure=1
 result=$(curl -s http://localhost:80/)
 
-if [[ "$result" =~ "Product Catalogs" ]]; then
+if [[ "$result" =~ "Product Catalog" ]]; then
     echo The web application has responded as expected!
     exit $succes
 else
