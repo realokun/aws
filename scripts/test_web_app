@@ -1,12 +1,13 @@
 #!/bin/bash
-success=0
-failure=1
+SUCCESS=0
+FAILURE=1
+#
+# This script performs a simple functional test agaist the locally deployed application
+#
 result=$(curl -s http://localhost:80/)
 
 if [[ "$result" =~ "Product Catalog" ]]; then
-    echo The web application has responded as expected!
-    exit $succes
+    echo 'Functional tests passed.'; exit $SUCCESS
 else
-    echo The web application has not responded as expected!
-    exit $failure
+    echo 'Functional tests failed.'; exit $FAILURE
 fi

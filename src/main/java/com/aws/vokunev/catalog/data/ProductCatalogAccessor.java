@@ -21,7 +21,7 @@ public class ProductCatalogAccessor {
 
         ArrayList<CatalogItem> catalog = new ArrayList<CatalogItem>();
 
-        Table table_ = dynamoDB.getTable(tableName);
+        Table table = dynamoDB.getTable(tableName);
         
         // Fetch the records form DynamoDB table
         ItemCollection<ScanOutcome> items = table.scan();

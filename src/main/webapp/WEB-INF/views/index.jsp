@@ -13,7 +13,7 @@
 </head>
 
 <body>
-  <h1>Items Catalog</h1>
+  <h1>Product Catalog</h1>
   <table cellspacing="10" borfder="0">
     <th>ID</th>
     <th>Year</th>
