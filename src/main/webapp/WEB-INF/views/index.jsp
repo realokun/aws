@@ -9,7 +9,7 @@
       background-color:lightgray;
     }
   </style>
-  <title>Product Catalog</title>
+  <title>Product Catalogs</title>
 </head>
 
 <body>
