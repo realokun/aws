@@ -6,10 +6,10 @@
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <style>
     body {
-      background-color:deepskyblue;
+      background-color:lightgray;
     }
   </style>
-  <title>Sample application</title>
+  <title>Sample Application - Product Catalog</title>
 </head>
 
 <body>
