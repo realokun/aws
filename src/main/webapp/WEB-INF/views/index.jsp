@@ -9,11 +9,11 @@
       background-color:floralwhite;
     }
   </style>
-  <title>Sample Application - Products Catalog</title>
+  <title>Sample Application - Product Catalog</title>
 </head>
 
 <body>
-  <h1>Products Catalog</h1>
+  <h1>Product Catalog</h1>
   <table cellspacing="10" borfder="0">
     <th>ID</th>
     <th>Year</th>
