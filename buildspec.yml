@@ -10,7 +10,7 @@ phases:
       - mvn clean compile test
   build:
     commands:
-      - mvn package
+      - mvn package -Dmaven.test.skip=true
   post_build:
     commands:
       # Do not remove this statement. This command is required for AWS CodeStar projects.
