@@ -4,7 +4,7 @@
     <artifactId>ProductCatalog</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
-    <name>Samle Java web application</name>
+    <name>Sample Java web application</name>
     <properties>
         <junit.platform.version>1.2.0</junit.platform.version>
         <junit.jupiter.version>5.2.0</junit.jupiter.version>
