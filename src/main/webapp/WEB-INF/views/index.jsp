@@ -6,14 +6,14 @@
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <style>
     body {
-      background-color:lightgrey;
+      background-color:cadetblue;
     }
   </style>
   <title>Sample Application - prodcatalog001</title>
 </head>
 
 <body>
-  <h1>Products Catalog</h1>
+  <h1>Product Catalog</h1>
   <table cellspacing="10" borfder="0">
     <th>ID</th>
     <th>Year</th>
