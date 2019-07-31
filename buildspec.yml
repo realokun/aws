@@ -21,6 +21,7 @@ artifacts:
   files:
     - 'appspec.yml'
     - 'template.yml'
+    - '.ebextensions/*'
     - 'scripts/*'
     - 'target/ROOT.war'
     - 'template-configuration.json'
