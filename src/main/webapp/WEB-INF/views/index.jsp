@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <style>
     body {
-      background-color:aqua;
+      background-color:azure;
     }
   </style>
   <title>Sample Application - prodcatalog001</title>
