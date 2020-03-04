@@ -3,6 +3,7 @@ package com.aws.vokunev.catalog.data;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
@@ -13,7 +14,7 @@ import com.amazonaws.services.dynamodbv2.document.Table;
 
 public class ProductCatalogAccessor {
 
-    static AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
+    static AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_WEST_2).build();
     static DynamoDB dynamoDB = new DynamoDB(client);
     static String tableName = "ProductCatalog";
 
