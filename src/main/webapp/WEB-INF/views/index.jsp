@@ -9,7 +9,7 @@
       background-color: azure;
     }
   </style>
-  <title>Sample Application - prodcatalog001</title>
+  <title>Sample Application - Product Catalog</title>
 </head>
 
 <body>
