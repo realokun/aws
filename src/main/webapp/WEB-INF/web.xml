@@ -7,15 +7,4 @@
         <exception-type>java.lang.Exception</exception-type> 
         <location>/error.jsp</location> 
     </error-page>
-
-    <filter>
-        <filter-name>inputParameterValidationFilter</filter-name>
-        <filter-class>com.aws.vokunev.catalog.controller.ProductDetailsFilter</filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>inputParameterValidationFilter</filter-name>
-        <url-pattern>/product</url-pattern>
-    </filter-mapping>
-
 </web-app>
