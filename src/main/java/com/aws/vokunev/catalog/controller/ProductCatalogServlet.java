@@ -24,6 +24,6 @@ public class ProductCatalogServlet extends HttpServlet {
         // Make the model available to the view        
         request.setAttribute("catalog", catalog);
         // Forward control to the view
-        request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 }
