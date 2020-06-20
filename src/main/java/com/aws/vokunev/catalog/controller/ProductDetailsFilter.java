@@ -12,7 +12,7 @@ import javax.servlet.annotation.WebFilter;
 /*
  * Validates the input parameter for the servlet
  */
-//@WebFilter(urlPatterns = {"/product"}) 
+@WebFilter(urlPatterns = {"/product"}) 
 public class ProductDetailsFilter implements Filter {
    
    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException { 
