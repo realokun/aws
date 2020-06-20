@@ -3,7 +3,7 @@ package com.aws.vokunev.catalog.data;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterAll;
@@ -35,7 +35,7 @@ public class ProductDataAccessorTest {
     @Test
     @DisplayName("Test for retrieving product catalog data")
     void testProductCatalog() {
-        ArrayList<CatalogItem> catalog = ProductDataAccessor.getProductCatalog();
+        List<CatalogItem> catalog = ProductDataAccessor.getProductCatalog();
         assertNotNull(catalog);
         assertTrue(catalog.size() > 0);
     }

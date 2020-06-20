@@ -15,6 +15,9 @@
     th {
       text-align:left;
     }
+    .priceUpdate {
+      color: red;
+    }
   </style>
   <title>Sample Application - Product Catalog</title>
 </head>
@@ -35,7 +38,7 @@
         <td>${item.title}</td>
         <td>${item.productCategory}</td>
         <td>$${item.price}</td>
-        <td>
+        <td class="priceUpdate">
           <c:if test="${item.oldPrice > 0}">
             <c:choose>
               <c:when test="${item.price > item.oldPrice}">Up from $${item.oldPrice}</c:when>

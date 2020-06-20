@@ -1,5 +1,8 @@
 package com.aws.vokunev.catalog.controller;
 
+import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,9 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.aws.vokunev.catalog.data.CatalogItem;
 import com.aws.vokunev.catalog.data.ProductDataAccessor;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 @WebServlet("/")
 public class ProductCatalogServlet extends HttpServlet {
 
@@ -20,7 +20,7 @@ public class ProductCatalogServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Retrieve the list of catalog items
-        ArrayList<CatalogItem> catalog = ProductDataAccessor.getProductCatalog();
+        List<CatalogItem> catalog = ProductDataAccessor.getProductCatalog();
         // Make the model available to the view        
         request.setAttribute("catalog", catalog);
         // Forward control to the view

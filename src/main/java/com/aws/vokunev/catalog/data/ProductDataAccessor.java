@@ -2,8 +2,10 @@ package com.aws.vokunev.catalog.data;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.amazonaws.regions.Regions;
@@ -23,15 +25,18 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 /**
- * This data accessor encapsulates the data access logic from the rest of the application.
+ * This data accessor encapsulates the data access logic from the rest of the
+ * application.
  */
 public class ProductDataAccessor {
 
     /**
-     * This method populates a list of {@link CatalogItem} objects from ProductCatalog table.
+     * This method populates a list of {@link CatalogItem} objects from
+     * ProductCatalog table.
+     * 
      * @return a list of {@link CatalogItem} objects
      */
-    public static ArrayList<CatalogItem> getProductCatalog() {
+    public static List<CatalogItem> getProductCatalog() {
 
         // Get DynamoDB table reference
         AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_WEST_2).build();
@@ -42,7 +47,7 @@ public class ProductDataAccessor {
         ItemCollection<ScanOutcome> items = table.scan();
 
         // Populate Product Catalog list from the database records
-        ArrayList<CatalogItem> catalog = new ArrayList<CatalogItem>();
+        List<CatalogItem> catalog = new ArrayList<CatalogItem>();
         Iterator<Item> iterator = items.iterator();
         while (iterator.hasNext()) {
 
@@ -62,6 +67,9 @@ public class ProductDataAccessor {
             // Log the created item
             System.out.println(item);
         }
+
+        // Order the items since the table scan perform no ordering
+        Collections.sort(catalog);
 
         return catalog;
     }

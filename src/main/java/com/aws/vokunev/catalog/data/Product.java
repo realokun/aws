@@ -40,5 +40,5 @@ public class Product extends CatalogItem {
     @Override
     public String toString() {
         return super.toString() + ", Product " + properties;
-    }    
+    }
 }

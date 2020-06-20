@@ -3,7 +3,7 @@ package com.aws.vokunev.catalog.data;
 /**
  * This class represents a catalog item with the common set of properties.
  */
-public class CatalogItem {
+public class CatalogItem implements Comparable<CatalogItem>{
 
     private int year;
     private String description;
@@ -138,5 +138,10 @@ public class CatalogItem {
             ", oldPrice='" + getOldPrice() + "'" +
             ", id='" + getId() + "'" +
             "}";
+    }
+
+    @Override
+    public int compareTo(CatalogItem otherItem) {
+        return this.id > otherItem.getId() ? 1 : this.id < otherItem.getId() ? -1 : 0;
     }
 }
