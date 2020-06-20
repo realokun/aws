@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.aws.vokunev.catalog.data.CatalogItem;
-import com.aws.vokunev.catalog.data.ProductCatalogAccessor;
+import com.aws.vokunev.catalog.data.ProductDataAccessor;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,9 +20,9 @@ public class ProductCatalogServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Retrieve the list of catalog items
-        ArrayList<CatalogItem> catalog = ProductCatalogAccessor.getProductCatalog();        
+        ArrayList<CatalogItem> catalog = ProductDataAccessor.getProductCatalog();
+        // Make the model available to the view        
         request.setAttribute("catalog", catalog);
-        request.setAttribute("myName", "Victor Okunev");
         // Forward control to the view
         request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);
     }

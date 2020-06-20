@@ -5,13 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 @DisplayName("Tests for ProductCatalogAccessor")
-public class ProductCatalogAccessorTest {
+public class ProductDataAccessorTest {
 
     /**
      * Initializing variables before we run the tests. Use @BeforeAll for
@@ -31,17 +32,27 @@ public class ProductCatalogAccessorTest {
     static void tearDown() {
     }
 
-    /**
-     * Basic test to verify the result obtained when calling
-     * {@link HelloWorldController#helloWorld} successfully.
-     * 
-     * @param <CatalogItem>
-     */
     @Test
-    @DisplayName("Test for retrieving the data")
-    void testDataAccess() {
-        ArrayList<CatalogItem> catalog = ProductCatalogAccessor.getProductCatalog();
+    @DisplayName("Test for retrieving product catalog data")
+    void testProductCatalog() {
+        ArrayList<CatalogItem> catalog = ProductDataAccessor.getProductCatalog();
         assertNotNull(catalog);
         assertTrue(catalog.size() > 0);
     }
+
+    @Test
+    @DisplayName("Test for retrieving product object")
+    void testExistingProduct() {
+        Product product = ProductDataAccessor.getProduct(213);
+        assertNotNull(product);
+    }    
+
+    @Test
+    @DisplayName("Test for retrieving product object")
+    void testNonexistingProduct() {
+        try {
+            Product product = ProductDataAccessor.getProduct(913);
+            Assert.fail("Expected an exception for a non-exiting product");
+        } catch (Exception ex) {}
+    }    
 }

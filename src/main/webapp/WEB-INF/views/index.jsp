@@ -6,7 +6,13 @@
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <style>
     body {
-      background-color: #FF9900;
+      background-color:azure;
+    }
+    table {
+      font-size: 120%;
+    }
+    th {
+      text-align:left;
     }
   </style>
   <title>Sample Application - Product Catalog</title>
@@ -14,19 +20,28 @@
 
 <body>
   <h1>Product Catalog</h1>
-  <table cellspacing="10" borfder="0">
+  <table cellspacing="10" border="0">
     <th>ID</th>
     <th>Year</th>
     <th>Title</th>
     <th>Category</th>
     <th>Price</th>
+    <th>Recent Updates</th>
     <c:forEach items="${catalog}" var="item">
       <tr>
-        <td>${item.id}</td>
+        <td><a href="product?id=${item.id}" target="_blank">${item.id}</a></td>
         <td>${item.year}</td>
         <td>${item.title}</td>
         <td>${item.productCategory}</td>
         <td>$${item.price}</td>
+        <td>
+          <c:if test="${item.oldPrice > 0}">
+            <c:choose>
+              <c:when test="${item.price > item.oldPrice}">Up from $${item.oldPrice}</c:when>
+              <c:otherwise>Down from $${item.oldPrice}</c:otherwise>
+           </c:choose>
+          </c:if>
+        </td>
       </tr>
     </c:forEach>
   </table>

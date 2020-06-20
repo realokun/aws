@@ -11,6 +11,7 @@ public class CatalogItem {
     private String title;
     private String image;
     private float price;
+    private float oldPrice = -1.0f;
     private int id;
 
     public CatalogItem() {
@@ -117,15 +118,24 @@ public class CatalogItem {
         return this;
     }
 
+    public float getOldPrice() {
+        return oldPrice;
+    }
+
+    public void setOldPrice(float oldPrice) {
+        this.oldPrice = oldPrice;
+    }
+    
     @Override
     public String toString() {
-        return "{" +
+        return "CatalogItem {" +
             " year='" + getYear() + "'" +
             ", description='" + getDescription() + "'" +
             ", productCategory='" + getProductCategory() + "'" +
             ", title='" + getTitle() + "'" +
             ", image='" + getImage() + "'" +
             ", price='" + getPrice() + "'" +
+            ", oldPrice='" + getOldPrice() + "'" +
             ", id='" + getId() + "'" +
             "}";
     }
