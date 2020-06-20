@@ -29,7 +29,7 @@
     <th>Recent Updates</th>
     <c:forEach items="${catalog}" var="item">
       <tr>
-        <td><a href="product?id=${item.id}" target="_blank"></a>${item.id}</a></td>
+        <td><a href="product?id=${item.id}" target="_blank">${item.id}</a></td>
         <td>${item.year}</td>
         <td>${item.title}</td>
         <td>${item.productCategory}</td>
