@@ -11,7 +11,7 @@ result=$(curl -s http://localhost:80/)
 if [[ "$result" =~ "Product Catalog" ]]; then
     echo "${INFO}Functional tests passed."; exit $SUCCESS
 else
-    echo "${ERROR}Functional tests failed for the web content:"
+    echo "${ERROR}Functional tests failed for the web content: $result"
     echo $result
     exit $FAILURE
 fi
