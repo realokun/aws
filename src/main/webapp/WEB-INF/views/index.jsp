@@ -9,7 +9,7 @@
       background-color:azure;
     }
     table td {
-      padding: 5px;
+      padding: 7px;
       font-size: 120%;
     }
     th {
