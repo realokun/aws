@@ -18,8 +18,18 @@ public class ProductDetailsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // This input paramater is validated by the filter
-        int productId = Integer.parseInt(request.getParameter("id"));
+        // Check if the parameter is present
+        String param = request.getParameter("id");
+        if (param == null ) {
+            throw new RuntimeException("Error: missing request parameter \"id\"");
+        }
+        // Parse the input parameter as int
+        int productId = 0;
+        try {
+            productId = Integer.parseInt(param);
+        } catch (java.lang.NumberFormatException ex) {
+            throw new RuntimeException("Error: unable to parse value " + param + " as integer.");
+        }
         // Retrieve a product for the provided id
         Product product = ProductDataAccessor.getProduct(productId);
         // Make the model available to the view
