@@ -8,9 +8,6 @@ INFO=`tput setaf 7`
 #
 result=$(curl -s http://localhost:80/)
 
-#temporary
-exit $SUCCESS
-
 if [[ "$result" =~ "Product Catalog" ]]; then
     echo "${INFO}Functional tests passed."; exit $SUCCESS
 else
