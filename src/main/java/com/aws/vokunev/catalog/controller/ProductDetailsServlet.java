@@ -25,6 +25,6 @@ public class ProductDetailsServlet extends HttpServlet {
         // Make the model available to the view
         request.setAttribute("product", product);
         // Forward control to the view
-        request.getRequestDispatcher("/product.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/product.jsp").forward(request, response);
     }
 }

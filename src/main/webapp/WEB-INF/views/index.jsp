@@ -8,7 +8,8 @@
     body {
       background-color:azure;
     }
-    table {
+    table td {
+      padding: 10px;
       font-size: 120%;
     }
     th {
@@ -20,7 +21,7 @@
 
 <body>
   <h1>Product Catalog</h1>
-  <table cellspacing="10" border="0">
+  <table>
     <th>ID</th>
     <th>Year</th>
     <th>Title</th>
