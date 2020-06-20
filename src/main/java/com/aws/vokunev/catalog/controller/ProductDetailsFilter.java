@@ -11,8 +11,10 @@ import javax.servlet.annotation.WebFilter;
 
 /*
  * Validates the input parameter for the servlet
+ * Note: The annotation @WebFilter(urlPatterns = {"/product"}) works on Tomcat 9.x,
+ * but fails on Tomcat 8.x, which is currently supported major version by
+ * AWS Elastic Beanstalk service. Therefore we'll declare our filter in web.xml file.
  */
-@WebFilter(urlPatterns = {"/product"}) 
 public class ProductDetailsFilter implements Filter {
    
    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException { 
