@@ -111,7 +111,7 @@ public class ProductDataAccessor {
      */
     public static Product getProduct(int productId) {
 
-        String result = invokeProductAPI("PRODUCT_DETAILS_API_ENDPOINT", productId);
+        String result = invokeProductAPI("https://hygnft82o0.execute-api.us-west-2.amazonaws.com/dev/product/details", productId);
 
         try {
             String error = JsonPath.read(result, "$.errorMessage");
@@ -152,15 +152,9 @@ public class ProductDataAccessor {
      * Invokes Product API from given endpoint with given product ID.
      * @return parseable response content.
      */
-    private static String invokeProductAPI(String endpoint_env_var, int productId) {
+    private static String invokeProductAPI(String apiEndpoint, int productId) {
 
         CloseableHttpClient httpClient = HttpClients.createDefault();
-
-        String apiEndpoint = System.getenv(endpoint_env_var);
-
-        if(apiEndpoint == null) {
-            throw new RuntimeException("The value of " + endpoint_env_var + " environment variable is not set.");
-        }
 
         String requestUrlTemplate = apiEndpoint.concat("?id=%s");
 
