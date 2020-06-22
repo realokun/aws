@@ -23,11 +23,11 @@ public class Product extends CatalogItem {
     public void addProperty(String key, String value) {
         // perform case-insensitive match against the core properties
         if (key.matches("(?i:year|description|productCategory|title|image|price|id)")) {
-            // these are core attributes added via the setters, we need to grab the xtras here
+            // skip the property
             return;
-       }
-
-       properties.put(key, value);
+        }
+        // add a non-core property
+        properties.put(key, value);
     }
 
     /*
