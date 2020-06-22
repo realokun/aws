@@ -1,8 +1,5 @@
-Welcome to Java-based implementation of the Product Catalog web application!
-=====================================================
-
-What's Here
------------
+A Java-based implementation of the Product Catalog web application.
+===================================================================
 
 * README.md - this file
 * .githooks - contains the Git hooks for the team to share 
