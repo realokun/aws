@@ -8,4 +8,3 @@ sed -i 's|port="8080"|port="80"|g' conf/server.xml
 rm -rf webapps/ROOT
 mv /home/ec2-user/javaapp/ROOT.war webapps/
 yum -y install java-1.8.0-openjdk-1.8.0.171
-alternatives --set java /usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/java
