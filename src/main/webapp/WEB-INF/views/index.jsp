@@ -6,8 +6,12 @@
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <style>
     body {
-      background-color:#FF9900;
+      background-color:white;
     }
+    table tbody tr:nth-child(even){
+      background-color:azure;
+      color:black;
+    }    
     table td {
       padding: 7px;
       font-size: 120%;
