@@ -11,7 +11,5 @@ artifacts:
   type: zip
   files:
     - 'appspec.yml'
-    - 'template.yml'
     - 'scripts/*'
     - 'target/ROOT.war'
-    - 'template-configuration.json'
