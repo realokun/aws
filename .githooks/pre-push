@@ -33,7 +33,7 @@ then
 fi
 
 # Check if Tomcat is running
-curl -s http://localhost:80/ > /dev/null
+curl -s http://localhost/ > /dev/null
 res=$?
 if test "$res" != "0"; then
    echo "${ERROR}Push aborted: unable to reach local Tomcat."; exit $FAILURE
@@ -41,10 +41,10 @@ fi
 
 # Deploy the application
 mvn package -Dmaven.test.skip=true
-sudo rm -rf ${CATALINA_HOME}/webapps/ROOT
-cp ./target/ROOT.war ${CATALINA_HOME}/webapps
+#sudo rm -rf ${CATALINA_HOME}/webapps/ROOT
+cp ./target/prodcatalog.war ${CATALINA_HOME}/webapps
 
-echo "${INFO}Paused for 15sec to let Tomcat redeploy the application.";
+echo "${INFO}Pause for 15sec to let Tomcat redeploy the application.";
 sleep 15s
 
 # Execute the same functional test as in remote deployment

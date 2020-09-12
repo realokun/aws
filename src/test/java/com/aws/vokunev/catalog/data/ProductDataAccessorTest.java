@@ -51,7 +51,7 @@ public class ProductDataAccessorTest {
     @DisplayName("Test for retrieving product object")
     void testNonexistingProduct() {
         try {
-            Product product = ProductDataAccessor.getProduct(913);
+            ProductDataAccessor.getProduct(913);
             Assert.fail("Expected an exception for a non-exiting product");
         } catch (Exception ex) {}
     }    

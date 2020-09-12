@@ -12,4 +12,4 @@ artifacts:
   files:
     - 'appspec.yml'
     - 'scripts/*'
-    - 'target/ROOT.war'
+    - 'target/prodcatalog.war'

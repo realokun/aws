@@ -6,9 +6,10 @@ INFO=`tput setaf 7`
 #
 # This script performs a simple functional test agaist the locally deployed application
 #
-result=$(curl -s http://localhost:80/)
+main_page=$(curl -s http://localhost/prodcatalog/)
+prod_details=$(curl -s http://localhost/prodcatalog/product?id=202)
 
-if [[ "$result" =~ "Product Catalog" ]]; then
+if [[ "$main_page" =~ "Product Catalog" && "$prod_details" =~ "Product Details" ]]; then
     echo "${INFO}Functional tests passed."; exit $SUCCESS
 else
     echo "${ERROR}Functional tests failed for the web content: $result"
