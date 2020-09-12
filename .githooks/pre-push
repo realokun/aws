@@ -55,9 +55,9 @@ fi
 
 # Build a new Docker image
 docker build -t prod_catalog_img  .
-# Make sure no previous versions of the container are running
-docker stop prod_catalog_ctr || true
-docker container rm prod_catalog_ctr || true
+# Make sure no previous versions of the container are running (suppress the output and continue on error)
+docker stop prod_catalog_ctr > /dev/null || true
+docker container rm prod_catalog_ctr > /dev/null || true
 # Spin up a new container instance
 docker container run -v ~/.aws/credentials:/root/.aws/credentials:ro -d --name prod_catalog_ctr -p 8081:8080 prod_catalog_img
 
