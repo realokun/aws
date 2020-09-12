@@ -5,9 +5,10 @@ ERROR=`tput setaf 1`
 INFO=`tput setaf 7`
 #
 # This script performs a simple functional test agaist the locally deployed application
+# The port number can be passed as a parameter, if null the port 80 is used.
 #
-main_page=$(curl -s http://localhost:$1/prodcatalog/)
-prod_details=$(curl -s http://localhost:$1/prodcatalog/product?id=202)
+main_page=$(curl -s http://localhost:${1:-80}/prodcatalog/)
+prod_details=$(curl -s http://localhost:${1:-80}/prodcatalog/product?id=202)
 
 if [[ "$main_page" =~ "Product Catalog" && "$prod_details" =~ "Product Details" ]]; then
     echo "${INFO}Functional tests passed."; exit $SUCCESS
