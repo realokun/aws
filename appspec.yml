@@ -4,14 +4,14 @@ files:
   - source: target/prodcatalog.war
     destination: /home/ec2-user/javaapp
 hooks:
-  AfterInstall:
+  BeforeInstall:
     - location: scripts/install_dependencies
       timeout: 300
       runas: root
+  ApplicationStart:
     - location: scripts/restart_server
       timeout: 300
       runas: root
-  BeforeAllowTraffic:
     - location: scripts/pause_for_appdeploy
       timeout: 300
       runas: root
