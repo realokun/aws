@@ -2,5 +2,3 @@
 cd /opt/tomcat
 bin/shutdown.sh
 bin/startup.sh
-echo "Pause for 15sec to let Tomcat redeploy the application.";
-sleep 15s
