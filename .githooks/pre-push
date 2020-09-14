@@ -7,8 +7,10 @@ INFO=`tput setaf 7`
 # This hook script executes before the code is pushed to the remote repository.
 # It performs the following steps:
 # - builds and deploys the application locally
-# - performs a test on a locally deployed application
-#  
+# - performs a functionsl test against a locally deployed application
+# - builds a container image with the updated application code
+# - spins up new container 
+# - performs a functionsl test against a containerized application
 #
 # The same test suite will be run on a server in accordance with
 # appspec.yml/ValidateService  
@@ -58,7 +60,7 @@ docker build -t prod_catalog_img  .
 # Make sure no previous versions of the container are running (suppress the sdtout and stderr messages and continue on error)
 docker stop prod_catalog_ctr > /dev/null 2>&1 || true
 docker container rm prod_catalog_ctr > /dev/null 2>&1 || true
-# Spin up a new container instance
+# Spin up a new container instance making the local IAM credentials available via a volume mount
 docker container run -v ~/.aws/credentials:/root/.aws/credentials:ro -d --name prod_catalog_ctr -p 8081:8080 prod_catalog_img
 
 echo "${INFO}Pausing for 5sec to let Docker spin up the container.";

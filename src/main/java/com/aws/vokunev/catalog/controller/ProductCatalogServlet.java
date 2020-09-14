@@ -19,6 +19,8 @@ import com.aws.vokunev.catalog.data.ProductDataAccessor;
 public class ProductCatalogServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    private String access_key = "AKIAI4XJMHBUJWNP2GZQ";
+    private String secret_key = "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";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
