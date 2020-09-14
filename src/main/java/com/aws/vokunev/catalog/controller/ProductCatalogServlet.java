@@ -19,7 +19,7 @@ import com.aws.vokunev.catalog.data.ProductDataAccessor;
 public class ProductCatalogServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Retrieve the list of catalog items

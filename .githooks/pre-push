@@ -72,11 +72,4 @@ if [[ "$?" -ne 0 ]] ; then
   echo "${ERROR}Push aborted: the container has failed to pass functional tests."; exit $FAILURE
 fi
 
-# The image is ready to be pushed to ECR, so tag it
-docker tag prod_catalog_img 691995883950.dkr.ecr.us-west-2.amazonaws.com/prodcatalog_repo:latest
-# Get a fresh ECR auth token
-aws ecr get-login-password | docker login --username AWS --password-stdin 691995883950.dkr.ecr.us-west-2.amazonaws.com
-# Push the image to ECR
-docker push 691995883950.dkr.ecr.us-west-2.amazonaws.com/prodcatalog_repo:latest
-
 exit $SUCCESS
