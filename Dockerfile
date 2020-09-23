@@ -8,7 +8,7 @@ RUN mkdir /opt/tomcat/
 WORKDIR /opt/tomcat
 
 # Install Apache Tomcat
-RUN curl -O http://apache.mirror.vexxhost.com/tomcat/tomcat-9/v9.0.38/bin/apache-tomcat-9.0.38.tar.gz
+RUN curl -O https://d1f28333hybq4l.cloudfront.net/apache-tomcat-9.0.38.tar.gz
 RUN tar xvfz apache*.tar.gz
 RUN mv apache-tomcat-9.0.38/* /opt/tomcat/.
 
