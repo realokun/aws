@@ -8,9 +8,9 @@ RUN mkdir /opt/tomcat/
 WORKDIR /opt/tomcat
 
 # Install Apache Tomcat
-RUN curl -O https://muug.ca/mirror/apache-dist/tomcat/tomcat-9/v9.0.37/bin/apache-tomcat-9.0.37.tar.gz
+RUN curl -O http://apache.mirror.vexxhost.com/tomcat/tomcat-9/v9.0.38/bin/apache-tomcat-9.0.38.tar.gz
 RUN tar xvfz apache*.tar.gz
-RUN mv apache-tomcat-9.0.37/* /opt/tomcat/.
+RUN mv apache-tomcat-9.0.38/* /opt/tomcat/.
 
 # Install Java Runtime
 RUN yum -y install java
