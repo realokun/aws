@@ -43,7 +43,7 @@ public class ProductDataAccessorTest {
     @Test
     @DisplayName("Test for retrieving product object")
     void testExistingProduct() {
-        Product product = ProductDataAccessor.getProduct(213);
+        Product product = ProductDataAccessor.getProduct(202);
         assertNotNull(product);
     }    
 

@@ -16,6 +16,7 @@ import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.ItemCollection;
 import com.amazonaws.services.dynamodbv2.document.ScanOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
+import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -120,13 +121,14 @@ public class ProductDataAccessor {
         }
 
         // Attempt to parse the content
-        String year = JsonPath.read(result, "$.Year");
-        String description = JsonPath.read(result, "$.Description");
-        String productCategory = JsonPath.read(result, "$.ProductCategory");
-        String title = JsonPath.read(result, "$.Title");
-        String image = JsonPath.read(result, "$.Image");
-        double price = JsonPath.read(result, "$.Price");
-        int id = JsonPath.read(result, "$.Id");
+        DocumentContext context = JsonPath.parse(result);
+        String year = context.read("$.Year");
+        String description = context.read("$.Description");
+        String productCategory = context.read("$.ProductCategory");
+        String title = context.read("$.Title");
+        String image = context.read("$.Image");
+        double price = context.read("$.Price", Double.class);
+        int id = context.read("$.Id", Integer.class);
 
         Product product = new Product();
         // Capture the core properties
