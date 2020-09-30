@@ -126,7 +126,7 @@ public class ProductDataAccessor {
         String title = JsonPath.read(result, "$.Title");
         String image = JsonPath.read(result, "$.Image");
         double price = JsonPath.read(result, "$.Price");
-        double id = JsonPath.read(result, "$.Id");
+        int id = JsonPath.read(result, "$.Id");
 
         Product product = new Product();
         // Capture the core properties
@@ -136,7 +136,7 @@ public class ProductDataAccessor {
         product.setTitle(title);
         product.setImage(image);
         product.setPrice((float)price);
-        product.setId((int)id);
+        product.setId(id);
         // Capture the additional properties
         LinkedHashMap<String, Object> props = JsonPath.parse(result).read("$");
         for (Map.Entry<String, Object> entry : props.entrySet()) {
