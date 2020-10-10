@@ -11,4 +11,5 @@ artifacts:
     - 'pom.xml'
     - 'Dockerfile'
     - 'scripts/*'
-    - 'target/*'
+    - 'target/**/*'
+    
