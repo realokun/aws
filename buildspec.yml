@@ -4,6 +4,8 @@ phases:
   build:
     commands:
       - mvn clean test-compile
+      - mvn package -Dmaven.test.skip=true
+      - rm target/prodcatalog.war      
       - ls -R
 artifacts:
   files:
