@@ -1,17 +1,11 @@
 version: 0.2
 
 phases:
-  pre_build:
-    commands:
-      - mvn clean compile
-      - sh scripts/configure_release
-      - mvn test
   build:
     commands:
-      - mvn package -Dmaven.test.skip=true
+      - mvn clean compile
 artifacts:
-  type: zip
   files:
     - 'appspec.yml'
     - 'scripts/*'
-    - 'target/prodcatalog.war'
+    - 'target/*'
