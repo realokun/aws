@@ -1,5 +1,6 @@
 package com.aws.vokunev.catalog.data;
 
+import java.io.InputStream;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -29,6 +31,19 @@ import org.apache.http.util.EntityUtils;
  * This class implements a DAO patetrn for accessing the data.
  */
 public class ProductDataAccessor {
+
+    // Load configuration data for this data accessor
+    private static final Properties endpoints = new Properties();
+    static {
+        try (final InputStream stream =
+                ProductDataAccessor.class.getClassLoader().getResourceAsStream("endpoints.properties")) {
+            endpoints.load(stream);
+            System.out.println("Service endpoints configuration loaded: " + endpoints);
+        } catch (Exception ex) {
+            System.out.println("Service endpoints configuration not found.");
+            throw new RuntimeException(ex);
+        }
+    }
 
     /**
      * This method populates a list of {@link CatalogItem} objects from
@@ -111,7 +126,7 @@ public class ProductDataAccessor {
      */
     public static Product getProduct(int productId) {
 
-        String result = invokeProductAPI("https://hygnft82o0.execute-api.us-west-2.amazonaws.com/dev/product/details", productId);
+        String result = invokeProductAPI(endpoints.getProperty("product_details"), productId);
 
         try {
             String error = JsonPath.read(result, "$.errorMessage");

@@ -2,7 +2,9 @@
 SUCCESS=0
 FAILURE=1
 ERROR=`tput setaf 1`
-INFO=`tput setaf 7`
+INFO=`tput setaf 2`
+DEFAULT=`tput setaf 7`
+
 #
 # This hook script executes before the code is pushed to the remote repository.
 # It performs the following steps:
@@ -22,13 +24,20 @@ if [[ "$?" -ne 0 ]] ; then
   echo "${ERROR}Push aborted: failed to compile source code."; exit $FAILURE
 fi
 
+sh scripts/configure_release
+if [[ "$?" -ne 0 ]] ; then
+  echo "${ERROR}Push aborted: failed to configure the release."; exit $FAILURE
+fi
+
+echo "${OK}The release is configured.";
+
 # Run unit tests
 mvn test
 if [[ "$?" -ne 0 ]] ; then
   echo "${ERROR}Push aborted: failed to pass unit tests."; exit $FAILURE
 fi
 
-# Check if Tomcat is configuERROR locally
+# Check if Tomcat is configured locally
 if [ -z "$CATALINA_HOME" ]
 then       
   echo "${ERROR}Push aborted: CATALINA_HOME is not configuERROR."; exit $FAILURE
@@ -54,6 +63,8 @@ sh scripts/test_web_app 80
 if [[ "$?" -ne 0 ]] ; then
   echo "${ERROR}Push aborted: failed to pass functional tests."; exit $FAILURE
 fi
+
+echo "${INFO}Building a Docker image.${DEFAULT}";
 
 # Build a new Docker image
 docker build -t prod_catalog_img  .

@@ -4,6 +4,7 @@ phases:
   pre_build:
     commands:
       - mvn clean compile test
+      - sh scripts/configure_release
   build:
     commands:
       - mvn package -Dmaven.test.skip=true
