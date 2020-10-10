@@ -8,5 +8,6 @@ artifacts:
   files:
     - 'appspec.yml'
     - 'pom.xml'
+    - 'Dockerfile'
     - 'scripts/*'
     - 'target/*'
