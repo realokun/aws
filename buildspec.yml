@@ -7,5 +7,6 @@ phases:
 artifacts:
   files:
     - 'appspec.yml'
+    - 'pom.xml'
     - 'scripts/*'
     - 'target/*'
