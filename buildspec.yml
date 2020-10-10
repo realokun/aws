@@ -4,6 +4,7 @@ phases:
   build:
     commands:
       - mvn clean compile
+      - ls -R
 artifacts:
   files:
     - 'appspec.yml'
