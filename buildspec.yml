@@ -3,7 +3,7 @@ version: 0.2
 phases:
   build:
     commands:
-      - mvn clean compile
+      - mvn clean test-compile
       - ls -R
 artifacts:
   files:
