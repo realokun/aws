@@ -7,14 +7,14 @@ phases:
       - mvn package -Dmaven.test.skip=true
       - rm target/prodcatalog.war      
       - ls -R
-artifacts:
-  files:
-    - 'appspec.yml'
-    - 'pom.xml'
-    - 'Dockerfile'
-    - 'scripts/*'
-    - 'target/**/*'
-cache:
-  paths:
-    - '/root/.m2/**/*' 
+  artifacts:
+    files:
+      - 'appspec.yml'
+      - 'pom.xml'
+      - 'Dockerfile'
+      - 'scripts/*'
+      - 'target/**/*'
+  cache:
+    paths:
+      - '/root/.m2/**/*' 
     
