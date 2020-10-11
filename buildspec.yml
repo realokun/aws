@@ -14,4 +14,7 @@ artifacts:
     - 'Dockerfile'
     - 'scripts/*'
     - 'target/**/*'
+cache:
+  paths:
+    - '/root/.m2/**/*' 
     
