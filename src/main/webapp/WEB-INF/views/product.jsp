@@ -56,7 +56,7 @@
           </tr>
         </table>
       </td>
-      <td style="text-align: center; vertical-align: middle;">
+      <td style="text-align: left; vertical-align: middle;">
         <img width="500" src="${product.image}" alt="product image"/>
       </td>
     </tr>
