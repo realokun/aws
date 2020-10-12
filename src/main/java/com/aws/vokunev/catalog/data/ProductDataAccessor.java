@@ -3,9 +3,7 @@ package com.aws.vokunev.catalog.data;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -94,23 +92,16 @@ public class ProductDataAccessor {
         String result = invokeGetAPIRequest(requestUrl);
         // Process the results
         DocumentContext context = JsonPath.parse(result);
-        String year = context.read("$.Year");
-        String description = context.read("$.Description");
-        String productCategory = context.read("$.ProductCategory");
-        String title = context.read("$.Title");
-        String image = context.read("$.Image");
-        double price = context.read("$.Price", Double.class);
-        int id = context.read("$.Id", Integer.class);
-
-        Product product = new Product();
         // Capture the core properties
-        product.setYear(Integer.parseInt(year));
-        product.setDescription(description);
-        product.setProductCategory(productCategory);
-        product.setTitle(title);
-        product.setImage(image);
-        product.setPrice((float)price);
-        product.setId(id);
+        Product product = new Product();
+        product.setId(context.read("$.Id", Integer.class));
+        product.setYear(context.read("$.Year", Integer.class));
+        product.setDescription(context.read("$.Description"));
+        product.setProductCategory(context.read("$.ProductCategory"));
+        product.setTitle(context.read("$.Title"));
+        product.setImage(context.read("$.Image"));
+        product.setPrice(context.read("$.Price", Double.class));
+        product.setId(context.read("$.Id", Integer.class));
         // Capture the additional properties
         LinkedHashMap<String, Object> props = JsonPath.parse(result).read("$");
         for (Map.Entry<String, Object> entry : props.entrySet()) {

@@ -52,7 +52,7 @@
             <td><b>Year:</b></td><td>${product.year}</td>
           </tr>
           <tr>
-            <td><b>Price:</b></td><td>${product.price}</td>
+            <td><b>Price:</b></td><td>$${product.price}</td>
           </tr>
         </table>
       </td>
