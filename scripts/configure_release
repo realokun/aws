@@ -12,4 +12,11 @@ else
   echo product_details="$SERVICE_ENDPOINT_PRODUCT_DETAILS" > target/classes/endpoints.properties
 fi
 
+if [[ -z "$SERVICE_ENDPOINT_PRODUCT_LIST" ]]; then
+  echo "Environment variable SERVICE_ENDPOINT_PRODUCT_LIST is not defined."; exit $FAILURE
+else
+  echo SERVICE_ENDPOINT_PRODUCT_LIST="$SERVICE_ENDPOINT_PRODUCT_LIST"
+  echo product_list="$SERVICE_ENDPOINT_PRODUCT_LIST" >> target/classes/endpoints.properties
+fi
+
 exit $SUCCESS

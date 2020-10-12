@@ -34,7 +34,7 @@
     <th>Title</th>
     <th>Category</th>
     <th>Price</th>
-    <th>Recent Updates</th>
+    <th>Price Trends</th>
     <c:forEach items="${catalog}" var="item">
       <tr>
         <td><a href="product?id=${item.id}" target="_blank">${item.id}</a></td>

@@ -10,8 +10,8 @@ public class CatalogItem implements Comparable<CatalogItem>{
     private String productCategory;
     private String title;
     private String image;
-    private float price;
-    private float oldPrice = -1.0f;
+    private double price;
+    private double oldPrice = -1.0f;
     private int id;
 
     public CatalogItem() {
@@ -67,11 +67,11 @@ public class CatalogItem implements Comparable<CatalogItem>{
         this.image = image;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return this.price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -108,7 +108,7 @@ public class CatalogItem implements Comparable<CatalogItem>{
         return this;
     }
 
-    public CatalogItem price(float price) {
+    public CatalogItem price(double price) {
         this.price = price;
         return this;
     }
@@ -118,11 +118,11 @@ public class CatalogItem implements Comparable<CatalogItem>{
         return this;
     }
 
-    public float getOldPrice() {
+    public double getOldPrice() {
         return oldPrice;
     }
 
-    public void setOldPrice(float oldPrice) {
+    public void setOldPrice(double oldPrice) {
         this.oldPrice = oldPrice;
     }
     

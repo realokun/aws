@@ -1,23 +1,15 @@
 package com.aws.vokunev.catalog.data;
 
 import java.io.InputStream;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
-import com.amazonaws.services.dynamodbv2.document.Item;
-import com.amazonaws.services.dynamodbv2.document.ItemCollection;
-import com.amazonaws.services.dynamodbv2.document.ScanOutcome;
-import com.amazonaws.services.dynamodbv2.document.Table;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
@@ -34,6 +26,7 @@ public class ProductDataAccessor {
 
     // Load configuration data for this data accessor
     private static final Properties endpoints = new Properties();
+
     static {
         try (final InputStream stream =
                 ProductDataAccessor.class.getClassLoader().getResourceAsStream("endpoints.properties")) {
@@ -53,30 +46,28 @@ public class ProductDataAccessor {
      */
     public static List<CatalogItem> getProductCatalog() {
 
-        // Get DynamoDB table reference
-        AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_WEST_2).build();
-        DynamoDB dynamoDB = new DynamoDB(client);
-        Table table = dynamoDB.getTable("ProductCatalog");
-
-        // Fetch the records from DynamoDB table
-        ItemCollection<ScanOutcome> items = table.scan();
-
+        // Prepare the request
+        String requestUrl = endpoints.getProperty("product_list");
+        // Invoke the API
+        String result = invokeGetAPIRequest(requestUrl);
+        // Process the results
+        DocumentContext context = JsonPath.parse(result);
+        int totalProducts = context.read("$.Products.length()");
         // Populate Product Catalog list from the database records
-        List<CatalogItem> catalog = new ArrayList<CatalogItem>();
-        Iterator<Item> iterator = items.iterator();
-        while (iterator.hasNext()) {
-
+        List<CatalogItem> catalog = new ArrayList<CatalogItem>(totalProducts);
+        for (int i = 0; i < totalProducts; i++) {
             CatalogItem item = new CatalogItem();
+            item.setId(context.read(String.format("$.Products[%s].Id", i)));
+            item.setYear(context.read(String.format("$.Products[%s].Year", i), Integer.class));
+            item.setTitle(context.read(String.format("$.Products[%s].Title", i)));
+            item.setProductCategory(context.read(String.format("$.Products[%s].ProductCategory", i)));
+            item.setPrice(context.read(String.format("$.Products[%s].Price", i), Double.class));
+            try {
+                item.setOldPrice(context.read(String.format("$.Products[%s].OldPrice", i), Double.class));
+            } catch (com.jayway.jsonpath.PathNotFoundException ex) {
+                // The old price attribute is not available for this product, just skip
+            }
 
-            Item record = iterator.next();
-            item.setId(record.getInt("Id"));
-            item.setTitle(record.getString("Title"));
-            item.setDescription(record.getString("Description"));
-            item.setProductCategory(record.getString("ProductCategory"));
-            item.setYear(record.getInt("Year"));
-            item.setImage(record.getString("Image"));
-            item.setPrice(record.getFloat("Price"));
-            item.setOldPrice(getOldPrice(record.getInt("Id")));
             catalog.add(item);
 
             // Log the created item
@@ -90,52 +81,18 @@ public class ProductDataAccessor {
     }
 
     /**
-     * This method returns an old price from a recent product price update event.
-     * @param productId product ID
-     * @return the old product price if the price update took place recently, otherwise -1.
-     */
-    public static float getOldPrice(int productId) {
-
-        // Get DynamoDB table reference
-        AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_WEST_2).build();
-        DynamoDB dynamoDB = new DynamoDB(client);
-        Table table = dynamoDB.getTable("ProductPriceUpdates");
-        // Fetch an item for the provided product ID
-        Item item = table.getItem("Id", productId);
-        if(item != null) {
-            System.out.println("Price Update Item: " + item);
-            long now = Instant.now().getEpochSecond();
-            long expiration = item.getLong("Expires");
-            System.out.println(String.format("The item expires on %d and the current time is %d. Has it expired? %s", expiration, now, now > expiration));
-            if(now > expiration) {
-                // The item TTL has expired, for the best practice, see:
-                // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/howitworks-ttl.html
-                return -1f;
-            } else {
-                return item.getFloat("OldPrice");
-            }
-        } else {
-            return -1f;
-        }
-    }
-
-    /**
      * This method fetches a Product for the provided ID.
      * @param productId product ID
      * @return an instance of a {@link Product} for the provided ID.
      */
     public static Product getProduct(int productId) {
 
-        String result = invokeProductAPI(endpoints.getProperty("product_details"), productId);
-
-        try {
-            String error = JsonPath.read(result, "$.errorMessage");
-            throw new RuntimeException(error);
-        } catch (com.jayway.jsonpath.PathNotFoundException ex) {
-            // No error was returned, which is good, we can continue
-        }
-
-        // Attempt to parse the content
+        // Prepare the request
+        String requestUrlTemplate = endpoints.getProperty("product_details").concat("?id=%s");
+        String requestUrl = String.format(requestUrlTemplate, productId);
+        // Invoke the API
+        String result = invokeGetAPIRequest(requestUrl);
+        // Process the results
         DocumentContext context = JsonPath.parse(result);
         String year = context.read("$.Year");
         String description = context.read("$.Description");
@@ -164,17 +121,10 @@ public class ProductDataAccessor {
         return product;
     }
 
-    /**
-     * Invokes Product API from given endpoint with given product ID.
-     * @return parseable response content.
-     */
-    private static String invokeProductAPI(String apiEndpoint, int productId) {
+    private static String invokeGetAPIRequest(String url) {
 
         CloseableHttpClient httpClient = HttpClients.createDefault();
-
-        String requestUrlTemplate = apiEndpoint.concat("?id=%s");
-
-        HttpGet request = new HttpGet(String.format(requestUrlTemplate, productId));
+        HttpGet request = new HttpGet(url);
 
         try {
             // Send Get request 
@@ -188,7 +138,17 @@ public class ProductDataAccessor {
             if (result == null) {
                 throw new RuntimeException("Unexpected null value for API response entity.");
             } 
+
+            try {
+                String error = JsonPath.read(result, "$.errorMessage");
+                throw new RuntimeException(error);
+            } catch (com.jayway.jsonpath.PathNotFoundException ex) {
+                // No error was returned, which is good, we can continue
+            }
+    
+            // Parse the content
             return result;
+
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
