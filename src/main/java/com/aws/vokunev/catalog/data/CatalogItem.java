@@ -10,6 +10,7 @@ public class CatalogItem implements Comparable<CatalogItem>{
     private String productCategory;
     private String title;
     private String image;
+    private int qty;
     private double price;
     private double oldPrice = -1.0f;
     private int id;
@@ -17,13 +18,14 @@ public class CatalogItem implements Comparable<CatalogItem>{
     public CatalogItem() {
     }
 
-    public CatalogItem(int year, String description, String productCategory, String title, String image, float price, int id) {
+    public CatalogItem(int year, String description, String productCategory, String title, String image, float price, int qty, int id) {
         this.year = year;
         this.description = description;
         this.productCategory = productCategory;
         this.title = title;
         this.image = image;
         this.price = price;
+        this.qty = qty;
         this.id = id;
     }
 
@@ -73,6 +75,14 @@ public class CatalogItem implements Comparable<CatalogItem>{
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public int getQty() {
+        return this.qty;
+    }
+
+    public void setQty(int qty) {
+        this.qty = qty;
     }
 
     public int getId() {
@@ -136,6 +146,7 @@ public class CatalogItem implements Comparable<CatalogItem>{
             ", image='" + getImage() + "'" +
             ", price='" + getPrice() + "'" +
             ", oldPrice='" + getOldPrice() + "'" +
+            ", qty='" + getQty() + "'" +            
             ", id='" + getId() + "'" +
             "}";
     }

@@ -56,6 +56,7 @@ public class ProductDataAccessor {
         for (int i = 0; i < totalProducts; i++) {
             CatalogItem item = new CatalogItem();
             item.setId(context.read(String.format("$.Products[%s].Id", i)));
+            item.setQty(context.read(String.format("$.Products[%s].Qty", i)));
             item.setYear(context.read(String.format("$.Products[%s].Year", i), Integer.class));
             item.setTitle(context.read(String.format("$.Products[%s].Title", i)));
             item.setProductCategory(context.read(String.format("$.Products[%s].ProductCategory", i)));
