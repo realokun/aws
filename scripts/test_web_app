@@ -17,7 +17,7 @@ else
 fi
 
 echo "Testing the product page functionality."
-result=$(curl -s http://localhost:${1:-80}/prodcatalog/product?id=202)
+result=$(curl -s http://localhost:${1:-80}/prodcatalog/product?id=-1)
 if [[ $result =~ "Product Details" ]]; then
     echo "Passed."
 else
