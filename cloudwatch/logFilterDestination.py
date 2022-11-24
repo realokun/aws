@@ -13,13 +13,17 @@ application log.
 """
 def lambda_handler(event, context):
     
+    print("Event received:" + json.dumps(event))    
+    
     # fetch the Base64 and compressed payload data from the event
     cw_data = event['awslogs']['data']
     # decode the payload
     compressed_payload = base64.b64decode(cw_data)
     # uncompress and extract the payload
     uncompressed_payload = gzip.decompress(compressed_payload)
-    payload = json.loads(uncompressed_payload)    
+    payload = json.loads(uncompressed_payload)
+    
+    print("Payload extracted:" + json.dumps(payload))
     
     # publish the application error notification to an SNS topic
     topic = sns.Topic(os.environ['SNS_TOPIC'])

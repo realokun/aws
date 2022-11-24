@@ -1,0 +1,5 @@
+rule sample_volume {
+    AWS::DynamoDB::Table {
+        Properties.ProvisionedThroughput.ReadCapacityUnits >= 10
+    }
+}
