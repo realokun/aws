@@ -41,7 +41,7 @@ public class HelloCdkStack extends Stack {
 
         // Create an SNS topic
         final Topic topic = Topic.Builder.create(this, "MyTopicID")
-            .topicName("MyCDKTopic")
+            .topicName("MyDemoCDKTopic")
             .displayName("An SNS topic created with CDK")
             .build();
 
