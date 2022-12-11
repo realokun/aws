@@ -2,7 +2,6 @@ import boto3
 import os
 import json
 import decimal
-import pyshorteners
 from botocore.client import Config
 from codeguru_profiler_agent import with_lambda_profiler
 import logging
@@ -40,9 +39,6 @@ def lambda_handler(event, context):
         # Convert input data to numeric
         productId = int(event['productId'])
         
-        # Publish custom metrics to CloudWatch
-        publishMetrics(productId, event['environment'])
-
         if productId == -1:
             # Test case, return a first available item
             result = table.scan(
@@ -76,10 +72,11 @@ def lambda_handler(event, context):
                 ExpiresIn=os.environ['EXPIRATION_SEC']
             )       
             
-            # Shorten the pre-signed URL    
-            type_tiny = pyshorteners.Shortener()
-            item['Image'] = type_tiny.tinyurl.short(presigned_url)
+            item['Image'] = presigned_url
    
+        # Publish custom metrics to CloudWatch
+        publishMetrics(productId, event['environment'])
+
     except Exception as ex:
         print(ex)
         raise ValueError("[BadRequest] Unable to complete request. Cause: {}".format(ex))    
