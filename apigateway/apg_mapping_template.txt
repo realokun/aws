@@ -9,7 +9,7 @@
         <year>$inputRoot.Year</year>
         <price>$inputRoot.Price</price>
         <qty>$inputRoot.Qty</qty>        
-        <image>$inputRoot.Image</image>
+        <image><![CDATA[$inputRoot.Image]]></image>
     </product>
 #else
     <productNotFound id="$input.params('id')"/>
