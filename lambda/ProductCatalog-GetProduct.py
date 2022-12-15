@@ -22,20 +22,26 @@ s3_client = boto3.client('s3', config=Config(s3={'addressing_style': 'path'}, si
 @with_lambda_profiler()
 def lambda_handler(event, context):
     
-    print("Event received:" + json.dumps(event))
+    # Include this id into each log record
+    logCorrelationId = context.aws_request_id
+    if 'context' in event:
+        logCorrelationId = event['context']['logCorrelationId']
+    
+    logger.info("({}) Event received: {}".format(logCorrelationId, event))
 
-    # Validate input
-    if 'productId' not in event:
-        raise ValueError("[BadRequest] Validation error: Missing required parameter [productId]")
-    if 'environment' not in event:
-        raise ValueError("[BadRequest] Validation error: Missing required parameter [environment]")        
+    try:    
+        # Validate input
+        if 'productId' not in event:
+            raise ValueError("Validation error: Missing required parameter [productId]")
+        if 'environment' not in event:
+            raise ValueError("Validation error: Missing required parameter [environment]")        
         
-    # Use the environment-specific table name
-    table = dynamodb.Table(os.environ[event['environment']])
+        # Use the environment-specific table name
+        tableName = os.environ[event['environment']]
+        table = dynamodb.Table(tableName)
     
-    print("Querying table {} for productId={}".format(table.table_name, event['productId']))
+        logger.info("({}) Querying table {} for productId={}".format(logCorrelationId, table.table_name, event['productId']))
     
-    try:
         # Convert input data to numeric
         productId = int(event['productId'])
         
@@ -57,7 +63,7 @@ def lambda_handler(event, context):
         
             # Item was not found
             if 'Item' not in result:
-                raise ValueError("[BadRequest] A product with Id={} does not exist.".format(productId))   
+                raise ValueError("A product with Id={} does not exist.".format(productId))   
         
             item = result['Item']
 
@@ -74,14 +80,16 @@ def lambda_handler(event, context):
             
             item['Image'] = presigned_url
    
+        item['logCorrelationId'] = logCorrelationId
+        
         # Publish custom metrics to CloudWatch
         publishMetrics(productId, event['environment'])
 
     except Exception as ex:
-        print(ex)
-        raise ValueError("[BadRequest] Unable to complete request. Cause: {}".format(ex))    
+        logger.error("({}) {}".format(logCorrelationId, ex))
+        raise ValueError("({}) [BadRequest] Unable to complete request. Cause: {}".format(logCorrelationId, ex))    
         
-    print(item)
+    logger.info("({}) Returning result: {}".format(logCorrelationId,item))
 
     return item
     
