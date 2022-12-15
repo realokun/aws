@@ -18,7 +18,16 @@ see https://github.com/boto/boto3/issues/1644#issuecomment-451611263 for details
 """
 s3_client = boto3.client('s3', config=Config(s3={'addressing_style': 'path'}, signature_version='s3v4'))
 
-# This function uses resource API and performs proper error handling
+# This function retrieves the details of a specified product from a specified environment and creates a pre-signed URL for the product's image.
+# It also uses a log correlation ID in all the log records.
+# Example of the event object:
+#    {
+#      "productId": "200",
+#      "environment": "PRODUCTION",
+#      "context": {
+#        "logCorrelationId": "277b8952-d7ae-464f-bc97-851279681ac5"
+#      }
+#    }
 @with_lambda_profiler()
 def lambda_handler(event, context):
     
