@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 
 import com.aws.vokunev.prodcatalog.model.AccessToken;
-import com.aws.vokunev.prodcatalog.model.ApplicationConfiguration;
-import com.aws.vokunev.prodcatalog.model.ApplicationPermissions;
+import com.aws.vokunev.prodcatalog.model.AppConfig;
+import com.aws.vokunev.prodcatalog.model.AppPermissions;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,7 +18,7 @@ public class UnitTestApplicationsPermission {
 
     private static AccessToken token1;
     private static AccessToken token2;
-    private static ApplicationConfiguration config;
+    private static AppConfig config;
 
     @BeforeAll
     static void setup() {
@@ -37,7 +37,7 @@ public class UnitTestApplicationsPermission {
         token2 = new AccessToken();
         token2.setGroups(tokenUserGroups2);
 
-        config = new ApplicationConfiguration();
+        config = new AppConfig();
 
         ArrayList<String> instanceMetadataAccessRoles = new ArrayList<String>();
         instanceMetadataAccessRoles.add("engineers");
@@ -59,28 +59,28 @@ public class UnitTestApplicationsPermission {
     @Test
     @DisplayName("Test for metadata access permission granted")
     void testMetadataAccessPermissionGranted() {
-        ApplicationPermissions permission = new ApplicationPermissions(token1, config);
+        AppPermissions permission = new AppPermissions(token1, config);
         assertTrue(permission.isPermittedToAccessMetadata());
     }
 
     @Test
     @DisplayName("Test for metadata access permission denied")
     void testMetadataAccessPermissionDenied() {
-        ApplicationPermissions permission = new ApplicationPermissions(token2, config);
+        AppPermissions permission = new AppPermissions(token2, config);
         assertFalse(permission.isPermittedToAccessMetadata());
     }
 
     @Test
     @DisplayName("Test for price update permission granted")
     void testPriceUpdatePermissionGranted() {
-        ApplicationPermissions permission = new ApplicationPermissions(token1, config);
+        AppPermissions permission = new AppPermissions(token1, config);
         assertTrue(permission.isPermittedToUpdatePrice());
     }
 
     @Test
     @DisplayName("Test for price update permission denied")
     void testPriceUpdatePermissionDenied() {
-        ApplicationPermissions permission = new ApplicationPermissions(token2, config);
+        AppPermissions permission = new AppPermissions(token2, config);
         assertFalse(permission.isPermittedToUpdatePrice());
     }
 }

@@ -3,9 +3,9 @@ package com.aws.vokunev.prodcatalog.model;
 import java.util.List;
 
 /**
- * An object of this type represents the application configuration data
+ * An object of this type represents an application-scoped configuration.
  */
-public class ApplicationConfiguration {
+public class AppConfig {
 
     private List<String> instanceMetadataAccessRoles;
     private List<String> priceUpdateRoles;
@@ -18,7 +18,7 @@ public class ApplicationConfiguration {
     private String itemColor;
     private boolean featureFlagPriceUpdate;
 
-    public ApplicationConfiguration() {
+    public AppConfig() {
     }
 
     public List<String> getInstanceMetadataAccessRoles() {

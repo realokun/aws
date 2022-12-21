@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.aws.vokunev.prodcatalog.dao.ApplicationConfigurationAccessor;
-import com.aws.vokunev.prodcatalog.model.ApplicationConfiguration;
+import com.aws.vokunev.prodcatalog.dao.AppConfigAccessor;
+import com.aws.vokunev.prodcatalog.model.AppConfig;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class UnitTestApplicationConfigurationAccessor {
 
     @Autowired
-    private ApplicationConfigurationAccessor configurationAccessor;
+    private AppConfigAccessor configurationAccessor;
 
     @Test
     @DisplayName("Test for parsing application configuration JSON data")
@@ -28,7 +28,7 @@ public class UnitTestApplicationConfigurationAccessor {
                 "UTF-8");
 
         // Parse JSON to ApplicationConfiguration object
-        ApplicationConfiguration config = configurationAccessor.getConfiguration(json);
+        AppConfig config = configurationAccessor.getConfiguration(json);
         assertNotNull(config);
         assertTrue(config.getInstanceMetadataAccessRoles().contains("operations"));
         assertTrue(config.getPriceUpdateRoles().contains("managers"));        

@@ -6,12 +6,12 @@ import java.util.ArrayList;
 /**
  * An object of this type represents the application permissions rules.
  */
-public class ApplicationPermissions {
+public class AppPermissions {
 
     private AccessToken token;
-    private ApplicationConfiguration config;
+    private AppConfig config;
 
-    public ApplicationPermissions(AccessToken token, ApplicationConfiguration config) {
+    public AppPermissions(AccessToken token, AppConfig config) {
         this.token = token;
         this.config = config;
     }

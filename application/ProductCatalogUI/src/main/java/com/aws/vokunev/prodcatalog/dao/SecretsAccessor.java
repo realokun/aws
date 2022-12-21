@@ -1,11 +1,13 @@
 package com.aws.vokunev.prodcatalog.dao;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.aws.vokunev.prodcatalog.util.CorrelatingLogger;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueRequest;
@@ -22,10 +24,16 @@ import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueRespon
 @Component
 public class SecretsAccessor {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SecretsAccessor.class);
-
     // Create a Secrets Manager client
     private SecretsManagerClient client = SecretsManagerClient.builder().build();
+
+    @Autowired
+    private CorrelatingLogger logger;
+
+    @PostConstruct
+    private void init() {
+        logger.init(SecretsAccessor.class);
+    }
 
     /**
      * Retrieves a secret value from AWS Secret Manager service.
@@ -37,11 +45,11 @@ public class SecretsAccessor {
     public String getSecret(String secretName, String secretKey) {
 
         GetSecretValueRequest request = GetSecretValueRequest.builder().secretId(secretName).build();
-        LOGGER.info("Requesting secret value for {}", secretName);
+        logger.info(String.format("Requesting secret value for %s", secretName));
         GetSecretValueResponse response = client.getSecretValue(request);
 
         if (response == null) {
-            LOGGER.error("AWS SecretsManager returned null response");
+            logger.error("AWS SecretsManager returned null response");
             return null;
         }
 

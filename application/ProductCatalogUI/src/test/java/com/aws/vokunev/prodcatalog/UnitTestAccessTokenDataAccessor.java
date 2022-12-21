@@ -3,7 +3,7 @@ package com.aws.vokunev.prodcatalog;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.aws.vokunev.prodcatalog.dao.AccessTokenDataAccessor;
+import com.aws.vokunev.prodcatalog.dao.AuthTokenAccessor;
 import com.aws.vokunev.prodcatalog.model.AccessToken;
 
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class UnitTestAccessTokenDataAccessor {
 
 	@Autowired
-	private AccessTokenDataAccessor accessTokenDataAccessor;        
+	private AuthTokenAccessor accessTokenDataAccessor;        
 
     @Test
     @DisplayName("Test for retrieving user object")

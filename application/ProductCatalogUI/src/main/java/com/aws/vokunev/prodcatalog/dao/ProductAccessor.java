@@ -7,18 +7,18 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Component;
+
 import com.aws.vokunev.prodcatalog.model.CatalogItem;
 import com.aws.vokunev.prodcatalog.model.Product;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
-import org.springframework.stereotype.Component;
-
 /**
  * This class implements a DAO patetrn for accessing the product data.
  */
 @Component
-public class ProductDataAccessor extends APIDataAccessor {
+public class ProductAccessor extends ApiAccessor {
 
     /**
      * This method fetches a list of {@link CatalogItem} objects from from the
@@ -84,7 +84,7 @@ public class ProductDataAccessor extends APIDataAccessor {
      * 
      * @param serviceEndpointURL
      * @param apiKey
-     * @param productId product ID
+     * @param productId          product ID
      * @return an instance of a {@link Product} for the provided ID or null if not
      *         found.
      */
@@ -137,7 +137,6 @@ public class ProductDataAccessor extends APIDataAccessor {
         }
 
         return product;
-
     }
 
     /**

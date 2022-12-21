@@ -1,11 +1,8 @@
 package com.aws.vokunev.prodcatalog.dao;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 
-import com.jayway.jsonpath.JsonPath;
+import javax.annotation.PostConstruct;
 
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -15,17 +12,41 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
+
+import com.aws.vokunev.prodcatalog.model.RequestScopeConfig;
+import com.aws.vokunev.prodcatalog.util.CorrelatingLogger;
+import com.jayway.jsonpath.JsonPath;
 
 /**
  * This is a base class for the data accessors retrieving the data from a web
  * API.
  */
-public abstract class APIDataAccessor {
+@Component
+@PropertySource("classpath:application.properties")
+public abstract class ApiAccessor {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(APIDataAccessor.class);
+    @Autowired
+    private RequestScopeConfig requestScope;
+    @Value("${http.header.log.correlationid.egress}")
+    private String correlationIdHeaderName;    
+    @Value("${http.header.api.key}")
+    private String apiKeyHeaderName;    
+    @Autowired
+    private CorrelatingLogger logger;
 
-    // HTTP methods supported by this accessor 
-    enum HttpMethod { GET, PUT; }
+    @PostConstruct
+    private void init() {
+        logger.init(ApiAccessor.class);
+    }
+
+    // HTTP methods supported by this accessor
+    enum HttpMethod {
+        GET, PUT;
+    }
 
     /**
      * Sends a GET request to the provided URL.
@@ -82,9 +103,13 @@ public abstract class APIDataAccessor {
                 break;
         }
 
-        // Include an API key if provided
+        // include log correlation id
+        request.setHeader(correlationIdHeaderName, requestScope.getLogCorrelationId());  
+        logger.info(String.format("Set egress request header %s=%s", correlationIdHeaderName, requestScope.getLogCorrelationId()));
+
+        // include an API key if available
         if (apiKey != null) {
-            request.setHeader("x-api-key", apiKey);
+            request.setHeader(apiKeyHeaderName, apiKey);
         }
 
         int CONNECTION_TIMEOUT_MS = timeoutSeconds * 1000; // Timeout in millis.
@@ -93,34 +118,32 @@ public abstract class APIDataAccessor {
 
         request.setConfig(requestConfig);
 
-        // Send Get request
-        LOGGER.info("Sending HTTP GET request: {}", request);
+        // send the Get request
+        logger.info(String.format("Sending HTTP GET request: %s", request));
         CloseableHttpResponse response = httpClient.execute(request);
 
-        // Log the HttpResponse Status
-        LOGGER.info("HTTP response status: {}", response.getStatusLine().toString());
+        // log the response Status
+        logger.info(String.format("HTTP response status: %s", response.getStatusLine().toString()));
 
-        // Process the response
+        // process the response
         String result = EntityUtils.toString(response.getEntity());
-        LOGGER.info("HTTP response data: {}", result);
-
-        // Treat any response code other than 200 as an error
-        if (response.getStatusLine().getStatusCode() != 200) {
-            throw new RuntimeException(response.getStatusLine().toString());
-        }
-
         if (result == null) {
             throw new RuntimeException("Unexpected null value for API response entity.");
+        }
+        logger.info(String.format("HTTP response data: %s", result));
+
+        // treat any response code other than 200 as an error
+        if (response.getStatusLine().getStatusCode() != 200) {
+            throw new RuntimeException(response.getStatusLine().toString());
         }
 
         try {
             String error = JsonPath.read(result, "$.errorMessage");
             throw new RuntimeException(error);
         } catch (com.jayway.jsonpath.PathNotFoundException ex) {
-            // No error was returned, which is good, we can continue
+            // no error was returned, which is good, we can continue
         }
 
-        // Parse the content
         return result;
-    }    
+    }
 }

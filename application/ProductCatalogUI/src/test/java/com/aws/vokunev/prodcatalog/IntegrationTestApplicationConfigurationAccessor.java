@@ -2,8 +2,8 @@ package com.aws.vokunev.prodcatalog;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import com.aws.vokunev.prodcatalog.dao.ApplicationConfigurationAccessor;
-import com.aws.vokunev.prodcatalog.model.ApplicationConfiguration;
+import com.aws.vokunev.prodcatalog.dao.AppConfigAccessor;
+import com.aws.vokunev.prodcatalog.model.AppConfig;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,12 +14,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class IntegrationTestApplicationConfigurationAccessor {
 
     @Autowired
-    private ApplicationConfigurationAccessor configurationAccessor;
+    private AppConfigAccessor configurationAccessor;
 
     @Test
     @DisplayName("Test for retrieving application configuration from AWS AppConfig")
     void testRetrieveApplicationConfiguration() {
-        ApplicationConfiguration config = configurationAccessor.getConfiguration();
+        AppConfig config = configurationAccessor.getConfiguration();
         assertNotNull(config);
         assertNotNull(config.getServiceEndpointProductList());
         assertNotNull(config.getServiceEndpointProductDetails());

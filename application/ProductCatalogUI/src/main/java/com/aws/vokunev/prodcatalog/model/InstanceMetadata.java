@@ -37,5 +37,4 @@ public class InstanceMetadata {
     public String toString() {
         return "InstanceMetadata [availabilityZone=" + availabilityZone + ", instanceId=" + instanceId + "]";
     }
-
 }

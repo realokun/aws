@@ -4,16 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.annotation.PostConstruct;
 
-import com.aws.vokunev.prodcatalog.model.ApplicationConfiguration;
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
+
+import com.aws.vokunev.prodcatalog.model.AppConfig;
+import com.aws.vokunev.prodcatalog.util.CorrelatingLogger;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
 
 import software.amazon.awssdk.services.appconfig.AppConfigClient;
 import software.amazon.awssdk.services.appconfig.model.GetConfigurationRequest;
@@ -23,17 +24,26 @@ import software.amazon.awssdk.services.appconfig.model.GetConfigurationResponse;
  * This accessor implements implements a DAO patetrn for accessing the
  * application configuration from AWS AppConfig service. It uses the most basic
  * data retrieval approach to keep this demo application simple. It requests the
- * application configuration directly from the AWS AppConfig service every time.
- * A better practice would be to implement an application configuration caching
+ * application configuration directly from the AWS AppConfig service for every
+ * application request.
+ * A better approach would be to cache the configuration data
  * to reduce the amount of API calls to the AWS AppConfig service. An example of
- * such more advanced implementation can be found at:
+ * a more advanced implementation can be found at:
  * https://github.com/aws-samples/aws-appconfig-java-sample
  */
 @Component
 @PropertySource("classpath:release.properties")
-public class ApplicationConfigurationAccessor {
+public class AppConfigAccessor {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationConfigurationAccessor.class);
+    @Autowired
+    private SecretsAccessor secretsAccessor;
+    @Autowired
+    private CorrelatingLogger logger;
+
+    @PostConstruct
+    private void init() {
+        logger.init(AppConfigAccessor.class);
+    }
 
     /*
      * This is a unique, user-specified ID to identify the client for the AWS
@@ -46,10 +56,8 @@ public class ApplicationConfigurationAccessor {
 
     @Value("${appconfig.application}")
     String application;
-
     @Value("${appconfig.environment}")
     String environment;
-
     @Value("${appconfig.profile}")
     String profile;
 
@@ -64,26 +72,34 @@ public class ApplicationConfigurationAccessor {
     }
 
     /**
-     * Retrieves an application configuration from AWS AppConfig service based on the values specified in release.properties file.
+     * Retrieves an application configuration from AWS AppConfig service based on
+     * the values specified in release.properties file.
      * 
      * @return Instance of ApplicationConfiguration object
      */
-    public ApplicationConfiguration getConfiguration() {
+    public AppConfig getConfiguration() {
 
-        LOGGER.info("Requesting AppConfig configuration for application={}, environment={}, configuration profile={}",
-                application, environment, profile);
+        logger.info(String.format(
+                "Requesting AppConfig configuration for application=%s, environment=%s, configuration profile=%s",
+                application, environment, profile));
 
         GetConfigurationResponse result = getConfigurationFromAPI(application, environment, profile);
 
         if (result.content() == null) {
-            LOGGER.error("AppConfig returned empty response");
-            return null;
+            logger.error("AppConfig returned empty response");
+            throw new RuntimeException("The application configuration is not available.");
         }
         String appConfigResponse = result.content().asUtf8String();
-        LOGGER.info("AppConfig response: {}", appConfigResponse);
+        logger.info(String.format("AppConfig response: %s", appConfigResponse));
 
-        // Process the response
-        return getConfiguration(appConfigResponse);
+        AppConfig appConfig = getConfiguration(appConfigResponse);
+
+        if (appConfig.getApiKeySecret() != null) {
+            // the APi invocation requires an API key, which has to be retrieved first
+            appConfig.setApiKey(secretsAccessor.getSecret(appConfig.getApiKeySecret(), "apikey"));
+        }
+
+        return appConfig;
     }
 
     /**
@@ -94,11 +110,11 @@ public class ApplicationConfigurationAccessor {
      *                                     configuration
      * @return Instance of ApplicationConfiguration object
      */
-    public ApplicationConfiguration getConfiguration(String applicationConfigurationJson) {
+    public AppConfig getConfiguration(String applicationConfigurationJson) {
 
         DocumentContext context = JsonPath.parse(applicationConfigurationJson);
-        ApplicationConfiguration config = new ApplicationConfiguration();
-        
+        AppConfig config = new AppConfig();
+
         int totalInstanceMetadataAccessRoles = context.read("$.InstanceMetadataAccessRoles.length()");
         List<String> instanceMetadataAccessRoles = new ArrayList<String>(totalInstanceMetadataAccessRoles);
         for (int i = 0; i < totalInstanceMetadataAccessRoles; i++) {
@@ -120,9 +136,8 @@ public class ApplicationConfigurationAccessor {
         config.setServiceEndpointLogout(context.read("$.ServiceEndpointLogout"));
         config.setItemColor(context.read("$.ItemColor"));
         config.setFeatureFlagPriceUpdate(context.read("$.FeatureFlagPriceUpdate"));
-        LOGGER.info("AppConfig response parsed: {}", config);
+        logger.info(String.format("AppConfig response parsed: %s", config));
 
         return config;
     }
-
 }

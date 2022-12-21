@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.util.List;
 
-import com.aws.vokunev.prodcatalog.dao.ApplicationConfigurationAccessor;
-import com.aws.vokunev.prodcatalog.dao.ProductDataAccessor;
+import com.aws.vokunev.prodcatalog.dao.AppConfigAccessor;
+import com.aws.vokunev.prodcatalog.dao.ProductAccessor;
 import com.aws.vokunev.prodcatalog.dao.SecretsAccessor;
-import com.aws.vokunev.prodcatalog.model.ApplicationConfiguration;
+import com.aws.vokunev.prodcatalog.model.AppConfig;
 import com.aws.vokunev.prodcatalog.model.CatalogItem;
 import com.aws.vokunev.prodcatalog.model.Product;
 
@@ -32,15 +32,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class IntegrationTestProductDataAccessor {
 
     @Autowired
-    private ApplicationConfigurationAccessor configurationAccessor;
+    private AppConfigAccessor configurationAccessor;
 
     @Autowired
     private SecretsAccessor secretsAccessor;
 
     @Autowired
-    private ProductDataAccessor productDataAccessor;
+    private ProductAccessor productDataAccessor;
 
-    private static ApplicationConfiguration config;
+    private static AppConfig config;
 
     @BeforeAll
     void setup() {

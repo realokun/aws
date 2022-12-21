@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.aws.vokunev.prodcatalog.dao.ProductDataAccessor;
+import com.aws.vokunev.prodcatalog.dao.ProductAccessor;
 import com.aws.vokunev.prodcatalog.model.CatalogItem;
 import com.aws.vokunev.prodcatalog.model.Product;
 
@@ -21,7 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class UnitTestProductDataAccessor {
 
     @Autowired
-    private ProductDataAccessor productDataAccessor;
+    private ProductAccessor productDataAccessor;
 
     @Test
     @DisplayName("Test for parsing product list JSON data")
