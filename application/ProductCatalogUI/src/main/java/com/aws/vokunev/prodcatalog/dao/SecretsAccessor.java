@@ -57,8 +57,11 @@ public class SecretsAccessor {
         // {"mysecretkey":"mysecretvalue"}
         String result = response.secretString();
         if (result == null) {
+            logger.error("AWS SecretsManager returned null value");
             return null;
         }
+
+        logger.info("The secret value rceived.");
 
         // Process the result
         DocumentContext context = JsonPath.parse(result);

@@ -9,7 +9,10 @@ import com.aws.vokunev.prodcatalog.model.RequestScopeConfig;
 
 /**
  * This is a simple wrapper around the org.slf4j.Logger. It injects a log
- * correlation id in every log message.S
+ * correlation id in every log message. Each message starts with the "\n"
+ * character to staisfy the "multi_line_start_pattern" of the CloudWatch agent.
+ * This way, each log mesaage will be logged separately, see:
+ * https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AgentReference.html
  */
 @Component
 public class CorrelatingLogger {
@@ -24,14 +27,14 @@ public class CorrelatingLogger {
     }
 
     public void info(String message) {
-        LOGGER.info(requestScope.formatLogMsg(message));
+        LOGGER.info("\n" + requestScope.formatLogMsg(message));
     }
 
     public void error(String message) {
-        LOGGER.error(requestScope.formatLogMsg(message));
+        LOGGER.error("\n" + requestScope.formatLogMsg(message));
     }
 
     public void error(String message, Exception ex) {
-        LOGGER.error(requestScope.formatLogMsg(message), ex);
+        LOGGER.error("\n" + requestScope.formatLogMsg(message), ex);
     }
 }
