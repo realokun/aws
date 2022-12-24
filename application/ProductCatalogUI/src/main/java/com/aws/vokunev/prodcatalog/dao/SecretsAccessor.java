@@ -61,7 +61,7 @@ public class SecretsAccessor {
             return null;
         }
 
-        logger.info("The secret value rceived.");
+        logger.info("The secret value received.");
 
         // Process the result
         DocumentContext context = JsonPath.parse(result);
