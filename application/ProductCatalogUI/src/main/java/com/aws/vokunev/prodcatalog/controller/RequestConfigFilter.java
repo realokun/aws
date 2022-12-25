@@ -76,7 +76,14 @@ public class RequestConfigFilter implements Filter {
                 isProvided = false;
             }
             requestScope.setLogCorrelationId(logCorrelationId);
-            logger.info(String.format("Begin processing request %s", urlString));
+            
+            String queryString = req.getQueryString();
+            if (queryString != null) {
+                logger.info(String.format("Begin processing request %s?%s", urlString, queryString));
+            } else {
+                logger.info(String.format("Begin processing request %s", urlString));
+            }
+            
             if (isProvided) {
                 logger.info(String.format("The log correlation id %s was provided with the request header %s",
                         logCorrelationId, correlationIdHeaderName));

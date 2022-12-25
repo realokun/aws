@@ -31,11 +31,6 @@ public class ExceptionController {
 
     @ExceptionHandler(value = {Exception.class, RuntimeException.class})
     public ModelAndView handleException(Exception exception) {
-
-        // To make sure that the \n doesn't break the mesage into multiple log messages,
-        // set "multi_line_start_pattern": "{datetime_format}" option in the CloudWatch
-        // Agent config
-        // as per: https://forums.aws.amazon.com/thread.jspa?threadID=158643
         logger.error(ExceptionUtils.getStackTrace(exception));
         return getModelAndView(exception, "error");
     }
