@@ -29,7 +29,7 @@ public class ExceptionController {
         logger.init(ExceptionController.class);
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(value = {Exception.class, RuntimeException.class})
     public ModelAndView handleException(Exception exception) {
 
         // To make sure that the \n doesn't break the mesage into multiple log messages,
