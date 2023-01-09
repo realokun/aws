@@ -1,6 +1,8 @@
 #!/bin/bash
 #
-# This script creates ZIP file that can be uploaded to AWS Lambda service as Python layer
+# This script creates ZIP file that can be uploaded to AWS Lambda service as a Python layer.
+# This layer contains pyshorteners, a Python lib to help you short and expand urls using the most
+# famous URL Shorteners availables.
 #
 # To run this script:
 # chmod u+x make_layer.sh
