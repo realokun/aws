@@ -15,9 +15,10 @@ By correlating the log entries produced by these services, we are able to track 
 
 # Solution
 
-The CloudFront distribution uses a JavaScript [function](generate_header_x-correlation-id.js), to inject a custom header `x-correlation-id` with generated UUID value.
-
-The EC2-based Java application uses the value of the `x-correlation-id` header to prefix every log entry it produces as can be seen in the class [CorrelatingLogger.java](https://github.com/realokun/aws/blob/master/application/ProductCatalogUI/src/main/java/com/aws/vokunev/prodcatalog/util/CorrelatingLogger.java).
-
+1. The CloudFront distribution uses a JavaScript [function](generate_header_x-correlation-id.js), to inject a custom HTTP header `x-correlation-id` with UUID value. This value will be used as a log correlation ID by the downstream services.
+2. The custom header `x-correlation-id` passes through the Application Load Balancer without any changes. 
+3. The EC2-based Java application extracts the value of the received `x-correlation-id` header to prefix every log entry it produces as can be seen in [CorrelatingLogger.java](https://github.com/realokun/aws/blob/master/application/ProductCatalogUI/src/main/java/com/aws/vokunev/prodcatalog/util/CorrelatingLogger.java).
+4. When making REST API request for the application data, the Java application copies the value of the log correlation ID into the standard AWS HTTP header `x-amzn-requestid` as can be seen in [ApiAccessor.java](https://github.com/realokun/aws/blob/master/application/ProductCatalogUI/src/main/java/com/aws/vokunev/prodcatalog/dao/ApiAccessor.java).
+ API Gateway uses the value of the header to prefix the execution log entries, as documented in [CloudWatch log formats for API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html).
 
 
