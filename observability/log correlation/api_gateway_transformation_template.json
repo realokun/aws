@@ -1,0 +1,7 @@
+{
+  "productId": "$input.params('id')",
+  "environment": "${stageVariables.environment}",
+  "context" : {
+      "logCorrelationId" : "$context.requestId"
+   }
+}
