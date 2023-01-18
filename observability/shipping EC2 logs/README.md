@@ -1,4 +1,4 @@
-## Shipping the application logs to Amazon CloudWatch
+## Shipping the application logs from EC2 instance to Amazon CloudWatch Logs
 
 1. Install unified CloudWatch agent (a newer replacement to the older CloudWatch Logs agent): https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance.html
 
