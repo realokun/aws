@@ -11,7 +11,7 @@ As can be seen on the architecture [diagram](https://github.com/realokun/aws/blo
 5. Amazon API Gateway REST API
 6. AWS Lambda (Python business logic)
 
-By correlating the log entries produced by these services, we are able to track the request propagation roundtrip. It is especially important for the steps 4, 5, and 6 that are the most likely sources of the application errors.
+By correlating the log entries produced by these services, we can to track the request propagation roundtrip. It is especially important for the steps 4, 5, and 6 that are the most likely sources of the application errors.
 
 ## Solution
 
