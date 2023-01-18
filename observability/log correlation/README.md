@@ -1,6 +1,6 @@
 # Introduction
 
-This document explains the technique used for the implementation of the log correlation pattern in a distributed Product Catalog application.
+This document explains the implementation of the log correlation pattern in a distributed Product Catalog application.
 
 As can be seen on the architecture [diagram](https://github.com/realokun/aws/blob/master/diagrams/ProductCatalogArch.png), a single request to the Product Catalog application gets processed by the sequence of services on AWS cloud:
 
@@ -19,6 +19,7 @@ By correlating the log entries produced by these services, we are able to track 
 2. The custom header `x-correlation-id` passes through the Application Load Balancer without any changes. 
 3. The EC2-based Java application extracts the value of the received `x-correlation-id` header to prefix every log entry it produces as can be seen in [CorrelatingLogger.java](https://github.com/realokun/aws/blob/master/application/ProductCatalogUI/src/main/java/com/aws/vokunev/prodcatalog/util/CorrelatingLogger.java).
 4. When making REST API request for the application data, the Java application copies the value of the log correlation ID into the standard AWS HTTP header `x-amzn-requestid` as can be seen in [ApiAccessor.java](https://github.com/realokun/aws/blob/master/application/ProductCatalogUI/src/main/java/com/aws/vokunev/prodcatalog/dao/ApiAccessor.java).
- API Gateway uses the value of the header to prefix the execution log entries, as documented in [CloudWatch log formats for API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html).
+5. API Gateway uses the value of `x-amzn-requestid` header to prefix the execution log entries, as documented in [CloudWatch log formats for API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html).
+6. API Gateway uses the Integration Request [mapping template](api_gateway_transformation_template.json) to pass the value of the log correlation ID as part of the event payload to downstream Lambda function.
 
 
