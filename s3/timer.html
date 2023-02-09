@@ -1,6 +1,37 @@
 <html>
     <head>
         <title>Classroom Timer</title>
+        
+        <!-- The input prompt implementation as per: https://kyleschaeffer.com/input-prompt-text -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+        <script>
+            $(document).ready(function(){
+              $('input[type=text][title],input[type=password][title],textarea[title]').each(function(i){
+                $(this).addClass('input-prompt-' + i);
+                var promptSpan = $('<span class="input-prompt"/>');
+                $(promptSpan).attr('id', 'input-prompt-' + i);
+                $(promptSpan).append($(this).attr('title'));
+                $(promptSpan).click(function(){
+                  $(this).hide();
+                  $('.' + $(this).attr('id')).focus();
+                });
+                if($(this).val() != ''){
+                  $(promptSpan).hide();
+                }
+                $(this).before(promptSpan);
+                $(this).focus(function(){
+                  $('#input-prompt-' + i).hide();
+                });
+                $(this).blur(function(){
+                  if($(this).val() == ''){
+                    $('#input-prompt-' + i).show();
+                  }
+                });
+              });
+            });        
+        </script>
+        <!-- End of the input prompt implementation -->
+                                
         <script type = "text/javascript">
             function resizeText(multiplier) {
                 var elem = document.getElementById('message');
@@ -55,6 +86,13 @@
                 border-style: none; 
                 padding-left: 10px;
             }
+            .input-prompt {
+                position: absolute;
+                color: #aaa;
+                font-size: 5em;
+                font-family: Verdana, Arial, Helvetica, sans-serif;              
+                padding-left: 10px;
+            }                        
             iframe {
                 border:none;
                 width: 100%;
@@ -85,7 +123,7 @@
                 <a class="option" href="#" onclick="toggleFullScreen();">[Xx]</a>
             </div>
             <div class="title">What is happening?</div>
-            <textarea id="message" rows="3"></textarea>
+            <textarea title="Type here..." id="message" rows="3"></textarea>
             </br>
             <div class="title">How much time is left?</div>
             <br>
