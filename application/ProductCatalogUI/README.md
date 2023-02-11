@@ -10,8 +10,6 @@ The application is implemented with the SpringBoot framework (https://spring.io/
 
 The implementation of the log correlation pattern across different components of the distributed application architecture is explained in [/observability/log correlation](https://github.com/realokun/aws/tree/master/observability/log%20correlation).
 
-The links to the deployed application in QA and PROD environments can be found at: https://www.cloud101.link/
-
 * README.md - this file
 * appspec.yml - this file is used by AWS CodeDeploy when deploying this application to EC2
 * buildspec-build.yml - this file is used by AWS CodeBuild to perform the build of this application
