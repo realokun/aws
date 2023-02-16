@@ -1,4 +1,2 @@
 # aws
-This repository contains the most interesting bits from my in-class demos.
-
-To learn about AWS training programs and offerings, please visit https://www.aws.training/ 
+This repository contains some useful bits related to application development and deployment on AWS cloud.
