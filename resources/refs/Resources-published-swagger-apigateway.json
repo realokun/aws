@@ -1,0 +1,97 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "2023-02-22T07:53:17Z",
+    "title" : "Resources"
+  },
+  "host" : "cwcv47i130.execute-api.us-west-2.amazonaws.com",
+  "basePath" : "/published",
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/resource/list" : {
+      "get" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "text/html" ],
+        "parameters" : [ {
+          "name" : "title",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "bucket",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "prefix",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Empty"
+            }
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "type" : "aws",
+          "uri" : "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:691995883950:function:gen_resource_list/invocations",
+          "httpMethod" : "POST",
+          "responses" : {
+            "default" : {
+              "statusCode" : "200",
+              "responseTemplates" : {
+                "text/html" : "<!DOCTYPE html>\n#set($inputRoot = $input.path('$'))\n<html>\n  <head>\n    <title>$inputRoot.title</title>\n    <style type=\"text/css\" media=\"screen, print\">\n        body { \n            font-family: Arial, sans-serif; \n            font-size: 100%;\n            text-align: left;\n            padding: 1em;\n        }\n        .title {\n            font-size: 2.0em;\n            color: black;\n        }\n        .entry {\n            font-size: 1.2em;\n            padding: 0.2em 0.75em;            \n        }\n        a:link {\n            text-decoration: none;\n        }\n        a:hover {\n            text-decoration: underline;\n        } \n    </style>    \n  </head>\n  <body>\n      <div class=\"title\">$inputRoot.title</div>\n      #foreach($entry in $inputRoot.content)\n        <div class=\"entry\">\n            <a href=\"${stageVariables.URL_BASE}$entry.ref\" target=\"$entry.ref\">$entry.name</a>\n        </div>\n      #end\n  </body>\n</html>"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{\n  \"title\": \"$input.params('title')\",\n  \"bucket\": \"$input.params('bucket')\",\n  \"prefix\": \"$input.params('prefix')\"\n}"
+          },
+          "passthroughBehavior" : "when_no_templates",
+          "contentHandling" : "CONVERT_TO_TEXT"
+        }
+      }
+    },
+    "/resource/{ref}" : {
+      "get" : {
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "ref",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Empty"
+            }
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
+          "uri" : "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:691995883950:function:res_proxy_redirect:prod/invocations",
+          "httpMethod" : "POST",
+          "responses" : {
+            "default" : {
+              "statusCode" : "200"
+            }
+          },
+          "passthroughBehavior" : "when_no_match",
+          "contentHandling" : "CONVERT_TO_TEXT"
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Empty" : {
+      "type" : "object",
+      "title" : "Empty Schema"
+    }
+  }
+}

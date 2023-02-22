@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>
+        Security Engineering on AWS - HackMD
+    </title>
+    <link rel="icon" type="image/png" href="https://hackmd.io/favicon.png">
+    <link rel="apple-touch-icon" href="https://hackmd.io/apple-touch-icon.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" integrity="sha256-3iu9jgsy9TpTwXKb7bNQzqWekRX7pPK+2OLj3R922fo=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/3.5.0/octicons.min.css" integrity="sha256-QiWfLIsCT02Sdwkogf6YMiQlj4NE84MKkzEMkZnMGdg=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism.min.css" integrity="sha256-vtR0hSWRc3Tb26iuN2oZHt3KRUomwTufNIf5/4oeCyg=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/css/basic/emojify.min.css" integrity="sha256-UOrvMOsSDSrW6szVLe8ZDZezBxh5IoIfgTwdNDgTjiU=" crossorigin="anonymous" />
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i|Source+Code+Pro:300,400,500|Source+Sans+Pro:300,300i,400,400i,600,600i|Source+Serif+Pro&subset=latin-ext);.hljs{background:#fff;color:#333;display:block;overflow-x:auto;padding:.5em}.hljs-comment,.hljs-meta{color:#969896}.hljs-emphasis,.hljs-quote,.hljs-string,.hljs-strong,.hljs-template-variable,.hljs-variable{color:#df5000}.hljs-keyword,.hljs-selector-tag,.hljs-type{color:#a71d5d}.hljs-attribute,.hljs-bullet,.hljs-literal,.hljs-number,.hljs-symbol{color:#0086b3}.hljs-built_in,.hljs-builtin-name{color:#005cc5}.hljs-name,.hljs-section{color:#63a35c}.hljs-tag{color:#333}.hljs-attr,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-id,.hljs-selector-pseudo,.hljs-title{color:#795da3}.hljs-addition{background-color:#eaffea;color:#55a532}.hljs-deletion{background-color:#ffecec;color:#bd2c00}.hljs-link{text-decoration:underline}.markdown-body{word-wrap:break-word;font-size:16px;line-height:1.5}.markdown-body:after,.markdown-body:before{content:"";display:table}.markdown-body:after{clear:both}.markdown-body>:first-child{margin-top:0!important}.markdown-body>:last-child{margin-bottom:0!important}.markdown-body a:not([href]){color:inherit;text-decoration:none}.markdown-body .absent{color:#c00}.markdown-body .anchor{float:left;line-height:1;margin-left:-20px;padding-right:4px}.markdown-body .anchor:focus{outline:none}.markdown-body blockquote,.markdown-body dl,.markdown-body ol,.markdown-body p,.markdown-body pre,.markdown-body table,.markdown-body ul{margin-bottom:16px;margin-top:0}.markdown-body hr{background-color:#e7e7e7;border:0;height:.25em;margin:24px 0;padding:0}.markdown-body blockquote{border-left:.25em solid #ddd;color:#777;font-size:16px;padding:0 1em}.markdown-body blockquote>:first-child{margin-top:0}.markdown-body blockquote>:last-child{margin-bottom:0}.markdown-body kbd,.popover kbd{background-color:#fcfcfc;border:1px solid;border-color:#ccc #ccc #bbb;border-radius:3px;box-shadow:inset 0 -1px 0 #bbb;color:#555;display:inline-block;font-size:11px;line-height:10px;padding:3px 5px;vertical-align:middle}.markdown-body .loweralpha{list-style-type:lower-alpha}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{font-weight:600;line-height:1.25;margin-bottom:16px;margin-top:24px}.markdown-body h1 .octicon-link,.markdown-body h2 .octicon-link,.markdown-body h3 .octicon-link,.markdown-body h4 .octicon-link,.markdown-body h5 .octicon-link,.markdown-body h6 .octicon-link{color:#000;vertical-align:middle;visibility:hidden}.markdown-body h1:hover .anchor,.markdown-body h2:hover .anchor,.markdown-body h3:hover .anchor,.markdown-body h4:hover .anchor,.markdown-body h5:hover .anchor,.markdown-body h6:hover .anchor{text-decoration:none}.markdown-body h1:hover .anchor .octicon-link,.markdown-body h2:hover .anchor .octicon-link,.markdown-body h3:hover .anchor .octicon-link,.markdown-body h4:hover .anchor .octicon-link,.markdown-body h5:hover .anchor .octicon-link,.markdown-body h6:hover .anchor .octicon-link{visibility:visible}.markdown-body h1 code,.markdown-body h1 tt,.markdown-body h2 code,.markdown-body h2 tt,.markdown-body h3 code,.markdown-body h3 tt,.markdown-body h4 code,.markdown-body h4 tt,.markdown-body h5 code,.markdown-body h5 tt,.markdown-body h6 code,.markdown-body h6 tt{font-size:inherit}.markdown-body h1{font-size:2em}.markdown-body h1,.markdown-body h2{border-bottom:1px solid #eee;padding-bottom:.3em}.markdown-body h2{font-size:1.5em}.markdown-body h3{font-size:1.25em}.markdown-body h4{font-size:1em}.markdown-body h5{font-size:.875em}.markdown-body h6{color:#777;font-size:.85em}.markdown-body ol,.markdown-body ul{padding-left:2em}.markdown-body ol.no-list,.markdown-body ul.no-list{list-style-type:none;padding:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-bottom:0;margin-top:0}.markdown-body li>p{margin-top:16px}.markdown-body li+li{padding-top:.25em}.markdown-body dl{padding:0}.markdown-body dl dt{font-size:1em;font-style:italic;font-weight:700;margin-top:16px;padding:0}.markdown-body dl dd{margin-bottom:16px;padding:0 16px}.markdown-body table{display:block;overflow:auto;width:100%;word-break:normal;word-break:keep-all}.markdown-body table th{font-weight:700}.markdown-body table td,.markdown-body table th{border:1px solid #ddd;padding:6px 13px}.markdown-body table tr{background-color:#fff;border-top:1px solid #ccc}.markdown-body table tr:nth-child(2n){background-color:#f8f8f8}.markdown-body img{background-color:#fff;box-sizing:initial;max-width:100%}.markdown-body img[align=right]{padding-left:20px}.markdown-body img[align=left]{padding-right:20px}.markdown-body .emoji{background-color:initial;max-width:none;vertical-align:text-top}.markdown-body span.frame{display:block;overflow:hidden}.markdown-body span.frame>span{border:1px solid #ddd;display:block;float:left;margin:13px 0 0;overflow:hidden;padding:7px;width:auto}.markdown-body span.frame span img{display:block;float:left}.markdown-body span.frame span span{clear:both;color:#333;display:block;padding:5px 0 0}.markdown-body span.align-center{clear:both;display:block;overflow:hidden}.markdown-body span.align-center>span{display:block;margin:13px auto 0;overflow:hidden;text-align:center}.markdown-body span.align-center span img{margin:0 auto;text-align:center}.markdown-body span.align-right{clear:both;display:block;overflow:hidden}.markdown-body span.align-right>span{display:block;margin:13px 0 0;overflow:hidden;text-align:right}.markdown-body span.align-right span img{margin:0;text-align:right}.markdown-body span.float-left{display:block;float:left;margin-right:13px;overflow:hidden}.markdown-body span.float-left span{margin:13px 0 0}.markdown-body span.float-right{display:block;float:right;margin-left:13px;overflow:hidden}.markdown-body span.float-right>span{display:block;margin:13px auto 0;overflow:hidden;text-align:right}.markdown-body code,.markdown-body tt{background-color:#0000000a;border-radius:3px;font-size:85%;margin:0;padding:.2em 0}.markdown-body code:after,.markdown-body code:before,.markdown-body tt:after,.markdown-body tt:before{content:"\00a0";letter-spacing:-.2em}.markdown-body code br,.markdown-body tt br{display:none}.markdown-body del code{text-decoration:inherit}.markdown-body pre{word-wrap:normal}.markdown-body pre>code{background:#0000;border:0;font-size:100%;margin:0;padding:0;white-space:pre;word-break:normal}.markdown-body .highlight{margin-bottom:16px}.markdown-body .highlight pre{margin-bottom:0;word-break:normal}.markdown-body .highlight pre,.markdown-body pre{background-color:#f7f7f7;border-radius:3px;font-size:85%;line-height:1.45;overflow:auto;padding:16px}.markdown-body pre code,.markdown-body pre tt{word-wrap:normal;background-color:initial;border:0;display:inline;line-height:inherit;margin:0;max-width:auto;overflow:visible;padding:0}.markdown-body pre code:after,.markdown-body pre code:before,.markdown-body pre tt:after,.markdown-body pre tt:before{content:normal}.markdown-body .csv-data td,.markdown-body .csv-data th{font-size:12px;line-height:1;overflow:hidden;padding:5px;text-align:left;white-space:nowrap}.markdown-body .csv-data .blob-line-num{background:#fff;border:0;padding:10px 8px 9px;text-align:right}.markdown-body .csv-data tr{border-top:0}.markdown-body .csv-data th{background:#f8f8f8;border-top:0;font-weight:700}.news .alert .markdown-body blockquote{border:0;padding:0 0 0 40px}.activity-tab .news .alert .commits,.activity-tab .news .markdown-body blockquote{padding-left:0}.task-list-item{list-style-type:none}.task-list-item label{font-weight:400}.task-list-item.enabled label{cursor:pointer}.task-list-item+.task-list-item{margin-top:3px}.task-list-item-checkbox{cursor:default!important;float:left;margin:.31em 0 .2em -1.3em!important;vertical-align:middle}.markdown-body{max-width:758px;overflow:visible!important;padding-bottom:40px;padding-top:40px;position:relative}.markdown-body .emoji{vertical-align:top}.markdown-body pre{border:inherit!important}.markdown-body code{color:inherit!important}.markdown-body pre code .wrapper{display:-moz-inline-flex;display:-ms-inline-flex;display:-o-inline-flex;display:inline-flex}.markdown-body pre code .gutter{float:left;overflow:hidden;-webkit-user-select:none;user-select:none}.markdown-body pre code .gutter.linenumber{border-right:3px solid #6ce26c!important;box-sizing:initial;color:#afafaf!important;cursor:default;display:inline-block;min-width:20px;padding:0 8px 0 0;position:relative;text-align:right;z-index:4}.markdown-body pre code .gutter.linenumber>span:before{content:attr(data-linenumber)}.markdown-body pre code .code{float:left;margin:0 0 0 16px}.markdown-body .gist .line-numbers{border-bottom:none;border-left:none;border-top:none}.markdown-body .gist .line-data{border:none}.markdown-body .gist table{border-collapse:inherit!important;border-spacing:0}.markdown-body code[data-gist-id]{background:none;padding:0}.markdown-body code[data-gist-id]:after,.markdown-body code[data-gist-id]:before{content:""}.markdown-body code[data-gist-id] .blob-num{border:unset}.markdown-body code[data-gist-id] table{margin-bottom:unset;overflow:unset}.markdown-body code[data-gist-id] table tr{background:unset}.markdown-body[dir=rtl] pre{direction:ltr}.markdown-body[dir=rtl] code{direction:ltr;unicode-bidi:embed}.markdown-body .alert>p:last-child{margin-bottom:0}.markdown-body pre.abc,.markdown-body pre.flow-chart,.markdown-body pre.graphviz,.markdown-body pre.mermaid,.markdown-body pre.sequence-diagram,.markdown-body pre.vega{background-color:inherit;border-radius:0;overflow:visible;text-align:center;white-space:inherit}.markdown-body pre.abc>code,.markdown-body pre.flow-chart>code,.markdown-body pre.graphviz>code,.markdown-body pre.mermaid>code,.markdown-body pre.sequence-diagram>code,.markdown-body pre.vega>code{text-align:left}.markdown-body pre.abc>svg,.markdown-body pre.flow-chart>svg,.markdown-body pre.graphviz>svg,.markdown-body pre.mermaid>svg,.markdown-body pre.sequence-diagram>svg,.markdown-body pre.vega>svg{height:100%;max-width:100%}.markdown-body pre>code.wrap{word-wrap:break-word;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space:-o-pre-wrap}.markdown-body .alert>p:last-child,.markdown-body .alert>ul:last-child{margin-bottom:0}.markdown-body summary{display:list-item}.markdown-body summary:focus{outline:none}.markdown-body details summary{cursor:pointer}.markdown-body details:not([open])>:not(summary){display:none}.markdown-body figure{margin:1em 40px}.markdown-body .mark,.markdown-body mark{background-color:#fff1a7}.vimeo,.youtube{background-color:#000;background-position:50%;background-repeat:no-repeat;background-size:contain;cursor:pointer;display:table;overflow:hidden;text-align:center}.vimeo,.youtube{position:relative;width:100%}.youtube{padding-bottom:56.25%}.vimeo img{object-fit:contain;width:100%;z-index:0}.youtube img{object-fit:cover;z-index:0}.vimeo iframe,.youtube iframe,.youtube img{height:100%;left:0;position:absolute;top:0;width:100%}.vimeo iframe,.youtube iframe{vertical-align:middle;z-index:1}.vimeo .icon,.youtube .icon{color:#fff;height:auto;left:50%;opacity:.3;position:absolute;top:50%;transform:translate(-50%,-50%);transition:opacity .2s;width:auto;z-index:0}.vimeo:hover .icon,.youtube:hover .icon{opacity:.6;transition:opacity .2s}.slideshare .inner,.speakerdeck .inner{position:relative;width:100%}.slideshare .inner iframe,.speakerdeck .inner iframe{bottom:0;height:100%;left:0;position:absolute;right:0;top:0;width:100%}.figma{display:table;padding-bottom:56.25%;position:relative;width:100%}.figma iframe{border:1px solid #eee;bottom:0;height:100%;left:0;position:absolute;right:0;top:0;width:100%}.markmap-container{height:300px}.markmap-container>svg{height:100%;width:100%}.MJX_Assistive_MathML{display:none}#MathJax_Message{z-index:1000!important}.ui-infobar{color:#777;margin:25px auto -25px;max-width:760px;position:relative;z-index:2}.toc .invisable-node{list-style-type:none}.ui-toc{bottom:20px;position:fixed;z-index:998}.ui-toc.both-mode{margin-left:8px}.ui-toc.both-mode .ui-toc-label{border-bottom-left-radius:0;border-top-left-radius:0;height:40px;padding:10px 4px}.ui-toc-label{background-color:#e6e6e6;border:none;color:#868686;transition:opacity .2s}.ui-toc .open .ui-toc-label{color:#fff;opacity:1;transition:opacity .2s}.ui-toc-label:focus{background-color:#ccc;color:#000;opacity:.3}.ui-toc-label:hover{background-color:#ccc;opacity:1;transition:opacity .2s}.ui-toc-dropdown{margin-bottom:20px;margin-top:20px;max-height:70vh;max-width:45vw;overflow:auto;padding-left:10px;padding-right:10px;text-align:inherit;width:25vw}.ui-toc-dropdown>.toc{max-height:calc(70vh - 100px);overflow:auto}.ui-toc-dropdown[dir=rtl] .nav{letter-spacing:.0029em;padding-right:0}.ui-toc-dropdown a{overflow:hidden;text-overflow:ellipsis;white-space:pre}.ui-toc-dropdown .nav>li>a{color:#767676;display:block;font-size:13px;font-weight:500;padding:4px 20px}.ui-toc-dropdown .nav>li:first-child:last-child>ul,.ui-toc-dropdown .toc.expand ul{display:block}.ui-toc-dropdown .nav>li>a:focus,.ui-toc-dropdown .nav>li>a:hover{background-color:initial;border-left:1px solid #000;color:#000;padding-left:19px;text-decoration:none}.ui-toc-dropdown[dir=rtl] .nav>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav>li>a:hover{border-left:none;border-right:1px solid #000;padding-right:19px}.ui-toc-dropdown .nav>.active:focus>a,.ui-toc-dropdown .nav>.active:hover>a,.ui-toc-dropdown .nav>.active>a{background-color:initial;border-left:2px solid #000;color:#000;font-weight:700;padding-left:18px}.ui-toc-dropdown[dir=rtl] .nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav>.active:hover>a,.ui-toc-dropdown[dir=rtl] .nav>.active>a{border-left:none;border-right:2px solid #000;padding-right:18px}.ui-toc-dropdown .nav .nav{display:none;padding-bottom:10px}.ui-toc-dropdown .nav>.active>ul{display:block}.ui-toc-dropdown .nav .nav>li>a{font-size:12px;font-weight:400;padding-bottom:1px;padding-left:30px;padding-top:1px}.ui-toc-dropdown[dir=rtl] .nav .nav>li>a{padding-right:30px}.ui-toc-dropdown .nav .nav>li>ul>li>a{font-size:12px;font-weight:400;padding-bottom:1px;padding-left:40px;padding-top:1px}.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>a{padding-right:40px}.ui-toc-dropdown .nav .nav>li>a:focus,.ui-toc-dropdown .nav .nav>li>a:hover{padding-left:29px}.ui-toc-dropdown[dir=rtl] .nav .nav>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav .nav>li>a:hover{padding-right:29px}.ui-toc-dropdown .nav .nav>li>ul>li>a:focus,.ui-toc-dropdown .nav .nav>li>ul>li>a:hover{padding-left:39px}.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>a:hover{padding-right:39px}.ui-toc-dropdown .nav .nav>.active:focus>a,.ui-toc-dropdown .nav .nav>.active:hover>a,.ui-toc-dropdown .nav .nav>.active>a{font-weight:500;padding-left:28px}.ui-toc-dropdown[dir=rtl] .nav .nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active:hover>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>a{padding-right:28px}.ui-toc-dropdown .nav .nav>.active>.nav>.active:focus>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active:hover>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active>a{font-weight:500;padding-left:38px}.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active:hover>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active>a{padding-right:38px}.markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}html[lang^=ja] .markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ ゴシック,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}html[lang=zh-tw] .markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}html[lang=zh-cn] .markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}html .markdown-body[lang^=ja]{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ ゴシック,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}html .markdown-body[lang=zh-tw]{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}html .markdown-body[lang=zh-cn]{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}html[lang^=ja] .ui-toc-dropdown{font-family:Source Sans Pro,Helvetica,Arial,Meiryo UI,MS PGothic,ＭＳ Ｐゴシック,sans-serif}html[lang=zh-tw] .ui-toc-dropdown{font-family:Source Sans Pro,Helvetica,Arial,Microsoft JhengHei UI,微軟正黑UI,sans-serif}html[lang=zh-cn] .ui-toc-dropdown{font-family:Source Sans Pro,Helvetica,Arial,Microsoft YaHei UI,微软雅黑UI,sans-serif}html .ui-toc-dropdown[lang^=ja]{font-family:Source Sans Pro,Helvetica,Arial,Meiryo UI,MS PGothic,ＭＳ Ｐゴシック,sans-serif}html .ui-toc-dropdown[lang=zh-tw]{font-family:Source Sans Pro,Helvetica,Arial,Microsoft JhengHei UI,微軟正黑UI,sans-serif}html .ui-toc-dropdown[lang=zh-cn]{font-family:Source Sans Pro,Helvetica,Arial,Microsoft YaHei UI,微软雅黑UI,sans-serif}.ui-affix-toc{max-height:70vh;max-width:15vw;overflow:auto;position:fixed;top:0}.back-to-top,.expand-toggle,.go-to-bottom{color:#999;display:block;font-size:12px;font-weight:500;margin-left:10px;margin-top:10px;padding:4px 10px}.back-to-top:focus,.back-to-top:hover,.expand-toggle:focus,.expand-toggle:hover,.go-to-bottom:focus,.go-to-bottom:hover{color:#563d7c;text-decoration:none}.back-to-top,.go-to-bottom{margin-top:0}.ui-user-icon{background-position:50%;background-repeat:no-repeat;background-size:cover;border-radius:50%;display:block;height:20px;margin-bottom:2px;margin-right:5px;margin-top:2px;width:20px}.ui-user-icon.small{display:inline-block;height:18px;margin:0 0 .2em;vertical-align:middle;width:18px}.ui-infobar>small>span{line-height:22px}.ui-infobar>small .dropdown{display:inline-block}.ui-infobar>small .dropdown a:focus,.ui-infobar>small .dropdown a:hover{text-decoration:none}.ui-more-info{color:#888;cursor:pointer;vertical-align:middle}.ui-more-info .fa{font-size:16px}.ui-connectedGithub,.ui-published-note{color:#888}.ui-connectedGithub{line-height:23px;white-space:nowrap}.ui-connectedGithub a.file-path{color:#888;padding-left:22px;text-decoration:none}.ui-connectedGithub a.file-path:active,.ui-connectedGithub a.file-path:hover{color:#888;text-decoration:underline}.ui-connectedGithub .fa{font-size:20px}.ui-published-note .fa{font-size:20px;vertical-align:top}.unselectable{-webkit-user-select:none;-o-user-select:none;user-select:none}.selectable{-webkit-user-select:text;-o-user-select:text;user-select:text}.inline-spoiler-section{cursor:pointer}.inline-spoiler-section .spoiler-text{background-color:#333;border-radius:2px}.inline-spoiler-section .spoiler-text>*{opacity:0}.inline-spoiler-section .spoiler-img{filter:blur(10px)}.inline-spoiler-section.raw{background-color:#333;border-radius:2px}.inline-spoiler-section.raw>*{opacity:0}.inline-spoiler-section.unveil{cursor:auto}.inline-spoiler-section.unveil .spoiler-text{background-color:#3333331a}.inline-spoiler-section.unveil .spoiler-text>*{opacity:1}.inline-spoiler-section.unveil .spoiler-img{filter:none}@media print{blockquote,div,img,pre,table{page-break-inside:avoid!important}a[href]:after{font-size:12px!important}}.markdown-body.slides{color:#222;position:relative;z-index:1}.markdown-body.slides:before{background-color:currentColor;bottom:0;box-shadow:0 0 0 50vw;content:"";display:block;left:0;position:absolute;right:0;top:0;z-index:-1}.markdown-body.slides section[data-markdown]{background-color:#fff;margin-bottom:1.5em;position:relative;text-align:center}.markdown-body.slides section[data-markdown] code{text-align:left}.markdown-body.slides section[data-markdown]:before{content:"";display:block;padding-bottom:56.23%}.markdown-body.slides section[data-markdown]>div:first-child{left:1em;max-height:100%;overflow:hidden;position:absolute;right:1em;top:50%;transform:translateY(-50%)}.markdown-body.slides section[data-markdown]>ul{display:inline-block}.markdown-body.slides>section>section+section:after{border:3px solid #777;content:"";height:1.5em;position:absolute;right:1em;top:-1.5em}.site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,sans-serif}html[lang^=ja] .site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ ゴシック,sans-serif}html[lang=zh-tw] .site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif}html[lang=zh-cn] .site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif}body{font-smoothing:subpixel-antialiased!important;-webkit-font-smoothing:subpixel-antialiased!important;-moz-osx-font-smoothing:auto!important;-webkit-overflow-scrolling:touch;font-family:Source Sans Pro,Helvetica,Arial,sans-serif;letter-spacing:.025em}html[lang^=ja] body{font-family:Source Sans Pro,Helvetica,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ ゴシック,sans-serif}html[lang=zh-tw] body{font-family:Source Sans Pro,Helvetica,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif}html[lang=zh-cn] body{font-family:Source Sans Pro,Helvetica,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif}abbr[title]{border-bottom:none;text-decoration:underline;-webkit-text-decoration:underline dotted;text-decoration:underline dotted}abbr[data-original-title],abbr[title]{cursor:help}body.modal-open{overflow-y:auto;padding-right:0!important}svg{text-shadow:none}
+    </style>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js" integrity="sha256-g6iAfvZp+nDQ2TdTR/VVKJf3bGro4ub5fvWSWVRi2NE=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js" integrity="sha256-8E4Is26QH0bD52WoQpcB+R/tcWQtpzlCojrybUd7Mxo=" crossorigin="anonymous"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div id="doc" class="markdown-body container-fluid" data-hard-breaks="false"><h1 id="Security-Engineering-on-AWS---Resources" data-id="Security-Engineering-on-AWS---Resources"><a class="anchor hidden-xs" href="#Security-Engineering-on-AWS---Resources" title="Security-Engineering-on-AWS---Resources"><span class="octicon octicon-link"></span></a>Security Engineering on AWS - Resources</h1><div class="embed-note"><blockquote style="border-left-color: rgb(255, 153, 9);">
+<p><span class="color" data-color="#ff9909"></span>
+<img style="float:left; padding-right:20px" src="https://i.imgur.com/YOtZKzh.jpg" alt="Victor Okunev" width="180px">
+<br>
+<br>
+Instructor: <strong>Victor Okunev</strong>
+<br>
+Amazon Web Services Canada
+<br>
+<img src="https://i.imgur.com/WRwCKAn.png" alt="LinkedIn" width="20"> <a href="mailto:vokunev@amazon.com" target="_blank" rel="noopener">vokunev@amazon.com</a>
+<br>
+<img src="https://i.imgur.com/flWBnoo.png" alt="LinkedIn" width="20"> <a href="https://www.linkedin.com/in/victorokunev/" target="_blank" rel="noopener">@VictorOkunev</a>
+<br>
+<br>
+<a href="https://www.credly.com/badges/68ab1dc6-e669-414d-a1a5-34b2a3c36c59" target="_blank" rel="noopener"><img src="https://i.imgur.com/F4LDq2q.png" alt="Champion - Authorized Instructor" loading="lazy" width="82"></a>
+<a href="https://www.credly.com/badges/688eec55-6fe8-4868-8c39-72a56df2da62" target="_blank" rel="noopener"><img src="https://i.imgur.com/Ea6RH9z.png" alt="Mentor - Authorized Instructor" loading="lazy" width="82"></a>
+<a href="https://www.credly.com/badges/67bb3dd2-bdc5-43b6-ab3d-b1dd9d463cfe/public_url" target="_blank" rel="noopener"><img src="https://i.imgur.com/4u5NdTB.png" alt="AWS Certified Developer – Associate" loading="lazy" width="82"></a>
+<a href="https://www.credly.com/badges/7793aa52-40ea-4207-9932-a95e4f88a785/public_url" target="_blank" rel="noopener"><img src="https://i.imgur.com/7UF2R6C.png" alt="AWS Certified Solutions Architect – Associate" loading="lazy" width="82"></a>
+<a href="https://www.credly.com/badges/0115492d-8cf9-4fd7-91ee-042470e59c97/public_url" target="_blank" rel="noopener"><img src="https://i.imgur.com/LBAETuz.png" alt="AWS Certified SysOps Administrator – Associate" loading="lazy" width="82"></a>
+<a href="https://www.credly.com/badges/57ffd23a-f512-4e04-b0d4-0e8504a7febb/public_url" target="_blank" rel="noopener"><img src="https://i.imgur.com/AzIdNo3.png" alt="AWS Certified DevOps Engineer – Professional" loading="lazy" width="82"></a>
+<a href="https://www.credly.com/badges/bd5cc965-eb3e-4b16-80ea-2bb6711138d8/public_url" target="_blank" rel="noopener"><img src="https://i.imgur.com/XxDn2ZW.png" alt="AWS Certified Security – Specialty" loading="lazy" width="82"></a>
+<a href="https://www.credly.com/badges/9516a819-9775-4310-b723-ae4cd23255e1/public_url" target="_blank" rel="noopener"><img src="https://i.imgur.com/kIRr88p.png" alt="AWS Certified Alexa Skill Builder – Specialty" loading="lazy" width="82"></a>
+<br>
+<br>
+AWS re:Invent 2022 – Top Announcements: <a href="https://aws.amazon.com/blogs/aws/top-announcements-of-aws-reinvent-2022/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/aws/top-announcements-of-aws-reinvent-2022/</a></p>
+</blockquote>
+</div><div class="embed-note"><h2 id="-About" data-id="-About"><a class="anchor hidden-xs" href="#-About" title="-About"><span class="octicon octicon-link"></span></a><img src="https://i.imgur.com/rfrg7zv.png" alt="drawing" width="40"> About</h2>
+<p><img class="emoji" alt=":pushpin:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/pushpin.png"> <strong>Important facts</strong></p>
+<div class="alert alert-info">
+<ul class="contains-task-list">
+<li class="task-list-item enabled"><input class="task-list-item-checkbox" checked="" type="checkbox" disabled="disabled"> Amazon Web Services (AWS) is a business unit within <a href="http://Amazon.com" target="_blank" rel="noopener">Amazon.com</a></li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox" checked="" type="checkbox" disabled="disabled"> Founded: 2003</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox" checked="" type="checkbox" disabled="disabled"> CEO: Adam Selipsky</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox" checked="" type="checkbox" disabled="disabled"> AWS public launch: March 14, 2006 (Amazon S3, Amazon SQS and Amazon EC2)</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox" checked="" type="checkbox" disabled="disabled"> Number of fully featured services: 200+ (<a href="https://aws.amazon.com/about-aws/global-infrastructure/" target="_blank" rel="noopener">https://aws.amazon.com/about-aws/global-infrastructure/</a>)</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox" checked="" type="checkbox" disabled="disabled"> Gartner has named AWS a Cloud Infrastructure and Platform Services (CIPS) Leader for the 12th consecutive year: <a href="https://aws.amazon.com/resources/analyst-reports/22-global-gartner-mq-cips/" target="_blank" rel="noopener">https://aws.amazon.com/resources/analyst-reports/22-global-gartner-mq-cips/</a></li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox" checked="" type="checkbox" disabled="disabled"> Number of price reductions since 2006: 106</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox" checked="" type="checkbox" disabled="disabled"> On September 30, 2019, Amazon’s Consumer business turned off its final Oracle database after migrating nearly 7,500 databases and 75 petabytes of data to AWS database services.</li>
+</ul>
+</div>
+<p><img class="emoji" alt=":sparkles:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/sparkles.png"> <strong>Recommended</strong></p>
+<ul>
+<li>The Distributed Computing Manifesto, 1998. Blog by Dr. Werner Vogels, CTO at <a href="http://Amazon.com" target="_blank" rel="noopener">Amazon.com</a>: <a href="https://www.allthingsdistributed.com/2022/11/amazon-1998-distributed-computing-manifesto.html" target="_blank" rel="noopener">https://www.allthingsdistributed.com/2022/11/amazon-1998-distributed-computing-manifesto.html</a></li>
+<li>What Led Amazon to its Own Microservices Architecture: <a href="https://thenewstack.io/led-amazon-microservices-architecture/" target="_blank" rel="noopener">https://thenewstack.io/led-amazon-microservices-architecture/</a></li>
+<li>The “Bezos’ API Mandate”, allegedly issued in 2002, has become folklore, but did not actually take place: <a href="https://api-university.com/blog/the-api-mandate/" target="_blank" rel="noopener">https://api-university.com/blog/the-api-mandate/</a></li>
+<li>“A Decade of Innovation” by James Hamilton: <a href="https://perspectives.mvdirona.com/2016/03/a-decade-of-innovation/" target="_blank" rel="noopener">https://perspectives.mvdirona.com/2016/03/a-decade-of-innovation/</a></li>
+<li>The Story of AWS and Andy Jassy’s Trillion Dollar Baby: <a href="https://medium.com/@furrier/original-content-the-story-of-aws-and-andy-jassys-trillion-dollar-baby-4e8a35fd7ed" target="_blank" rel="noopener">https://medium.com/@furrier/original-content-the-story-of-aws-and-andy-jassys-trillion-dollar-baby-4e8a35fd7ed</a></li>
+<li>10 things you can do today to reduce AWS costs: <a href="https://aws-blogs-prod.amazon.com/compute/10-things-you-can-do-today-to-reduce-aws-costs/" target="_blank" rel="noopener">https://aws-blogs-prod.amazon.com/compute/10-things-you-can-do-today-to-reduce-aws-costs/</a></li>
+<li>AWS Marketplace is a digital catalog with thousands of software listings from independent software vendors that make it easy to find, test, buy, and deploy software that runs on AWS: <a href="https://aws.amazon.com/marketplace/" target="_blank" rel="noopener">https://aws.amazon.com/marketplace/</a></li>
+</ul>
+<p><img class="emoji" alt=":bulb:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/bulb.png"> <strong>See Also</strong></p>
+<ul>
+<li>Because of aggregate usage from all customers, AWS can achieve higher economies of scale and pass savings on to customers: <a href="https://www.investopedia.com/terms/e/economiesofscale.asp" target="_blank" rel="noopener">https://www.investopedia.com/terms/e/economiesofscale.asp</a></li>
+<li>To increase a soft limit of a service (e.g. Lambda’s regional concurrency limit), submit a request in the Support Center console: <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase" target="_blank" rel="noopener">https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase</a></li>
+</ul>
+</div><div class="embed-note"><h2 id="-Introduction-to-Security-on-AWS" data-id="-Introduction-to-Security-on-AWS"><a class="anchor hidden-xs" href="#-Introduction-to-Security-on-AWS" title="-Introduction-to-Security-on-AWS"><span class="octicon octicon-link"></span></a><img src="https://i.imgur.com/DYPcxbr.png" alt="drawing" width="40"> Introduction to Security on AWS</h2>
+<p><img class="emoji" alt=":fire:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/fire.png"> <strong>What’s new?</strong></p>
+<ul>
+<li>AWS Security Hub launches a new security best practice control: <a href="https://aws.amazon.com/about-aws/whats-new/2022/09/aws-security-hub-new-security-best-practice-control/" target="_blank" rel="noopener">https://aws.amazon.com/about-aws/whats-new/2022/09/aws-security-hub-new-security-best-practice-control/</a></li>
+<li>8 Top 2021 AWS Security service launches security professionals should review: <a href="https://aws.amazon.com/blogs/security/top-2021-aws-security-service-launches-part-1/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/security/top-2021-aws-security-service-launches-part-1/</a></li>
+</ul>
+<p><img class="emoji" alt=":sparkles:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/sparkles.png"> <strong>Recommended</strong></p>
+<ul>
+<li>AWS Security Documentation: <a href="https://docs.aws.amazon.com/security/" target="_blank" rel="noopener">https://docs.aws.amazon.com/security/</a></li>
+<li>AWS Shared Responsibility Model: <a href="https://aws.amazon.com/compliance/shared-responsibility-model/" target="_blank" rel="noopener">https://aws.amazon.com/compliance/shared-responsibility-model/</a></li>
+<li>AWS Cloud Adoption Framework (CAF): <a href="https://aws.amazon.com/professional-services/CAF/" target="_blank" rel="noopener">https://aws.amazon.com/professional-services/CAF/</a>
+<ul>
+<li>AWS experience + best practices = improve your cloud readiness</li>
+<li>Six Perspectives: Business, People, Governance, Platform, <strong>Security</strong>, and Operations</li>
+</ul>
+</li>
+<li>AWS Well-Architected Framework, Security Pillar: <a href="https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html</a></li>
+<li>AWS Managed Service Provider (MSP) Program: <a href="https://aws.amazon.com/partners/managed-service/" target="_blank" rel="noopener">https://aws.amazon.com/partners/managed-service/</a></li>
+<li>How to approach threat modeling: <a href="https://aws.amazon.com/blogs/security/how-to-approach-threat-modeling/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/security/how-to-approach-threat-modeling/</a></li>
+<li>Assess your security posture to identify and remediate security gaps susceptible to ransomware: <a href="https://aws.amazon.com/blogs/publicsector/assess-your-security-posture-identify-remediate-security-gaps-ransomware/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/publicsector/assess-your-security-posture-identify-remediate-security-gaps-ransomware/</a></li>
+<li>Service endpoints and service quotas for AWS services: <a href="https://docs.aws.amazon.com/general/latest/gr/aws-service-information.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/general/latest/gr/aws-service-information.html</a></li>
+</ul>
+<p><img class="emoji" alt=":cop:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/cop.png"> <strong>Testing Policies</strong></p>
+<ul>
+<li>Penetration Testing: <a href="https://aws.amazon.com/security/penetration-testing/" target="_blank" rel="noopener">https://aws.amazon.com/security/penetration-testing/</a></li>
+<li>DDoS Simulation Testing Policy: <a href="https://aws.amazon.com/security/ddos-simulation-testing/" target="_blank" rel="noopener">https://aws.amazon.com/security/ddos-simulation-testing/</a></li>
+<li>Network Stress Test: <a href="https://aws.amazon.com/ec2/testing/" target="_blank" rel="noopener">https://aws.amazon.com/ec2/testing/</a></li>
+</ul>
+</div><div class="embed-note"><h2 id="-Introduction-to-DevOps-on-AWS" data-id="-Introduction-to-DevOps-on-AWS"><a class="anchor hidden-xs" href="#-Introduction-to-DevOps-on-AWS" title="-Introduction-to-DevOps-on-AWS"><span class="octicon octicon-link"></span></a><img src="https://i.imgur.com/PON6sBB.png" alt="drawing" width="40"> Introduction to DevOps on AWS</h2>
+<p><img class="emoji" alt=":pushpin:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/pushpin.png"> <strong>Important facts</strong></p>
+<div class="alert alert-info">
+<ul class="contains-task-list">
+<li class="task-list-item enabled"><input class="task-list-item-checkbox" checked="" type="checkbox" disabled="disabled"> The Three Ways - The Principles Underpinning DevOps:
+<a href="https://itrevolution.com/the-three-ways-principles-underpinning-devops/" target="_blank" rel="noopener">https://itrevolution.com/the-three-ways-principles-underpinning-devops/</a></li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox" checked="" type="checkbox" disabled="disabled"> As of 2014, Amazon ran more than 50M production deployments a year, once every 0.63 second</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox" checked="" type="checkbox" disabled="disabled"> Number of people in a two-pizza team: 8</li>
+</ul>
+</div>
+<p><img class="emoji" alt=":fire:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/fire.png"> <strong>What’s new?</strong></p>
+<ul>
+<li>Puppet State of DevOps Report: <a href="https://puppet.com/resources/report/state-of-devops-report/" target="_blank" rel="noopener">https://puppet.com/resources/report/state-of-devops-report/</a></li>
+</ul>
+<p><img class="emoji" alt=":sparkles:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/sparkles.png"> <strong>Recommended</strong></p>
+<ul>
+<li>The Origins and Principles of Lean Manufacturing: <a href="https://www.liveabout.com/origins-and-principles-of-lean-manufacturing-2221395" target="_blank" rel="noopener">https://www.liveabout.com/origins-and-principles-of-lean-manufacturing-2221395</a></li>
+<li>What Team Structure is Right for DevOps to Flourish? <a href="https://web.devopstopologies.com/" target="_blank" rel="noopener">https://web.devopstopologies.com/</a></li>
+<li>What Can Development Teams Learn from Conway’s Law? <a href="https://www.jamasoftware.com/blog/what-can-development-teams-learn-from-conways-law/" target="_blank" rel="noopener">https://www.jamasoftware.com/blog/what-can-development-teams-learn-from-conways-law/</a></li>
+<li>The Science Behind Why Small Teams Work More Productively: Jeff Bezos’ 2 Pizza Rule: <a href="https://buffer.com/resources/small-teams-why-startups-often-win-against-google-and-facebook-the-science-behind-why-smaller-teams-get-more-done" target="_blank" rel="noopener">https://buffer.com/resources/small-teams-why-startups-often-win-against-google-and-facebook-the-science-behind-why-smaller-teams-get-more-done</a></li>
+<li>DevOps at Amazon:
+<ul>
+<li>The Distributed Computing Manifesto, 1998. Blog by Dr. Werner Vogels, CTO at <a href="http://Amazon.com" target="_blank" rel="noopener">Amazon.com</a>: <a href="https://www.allthingsdistributed.com/2022/11/amazon-1998-distributed-computing-manifesto.html" target="_blank" rel="noopener">https://www.allthingsdistributed.com/2022/11/amazon-1998-distributed-computing-manifesto.html</a></li>
+<li>What Led Amazon to its Own Microservices Architecture: <a href="https://thenewstack.io/led-amazon-microservices-architecture/" target="_blank" rel="noopener">https://thenewstack.io/led-amazon-microservices-architecture/</a></li>
+<li>The “Bezos’ API Mandate”, allegedly issued in 2002, has become folklore, but did not actually take place: <a href="https://api-university.com/blog/the-api-mandate/" target="_blank" rel="noopener">https://api-university.com/blog/the-api-mandate/</a></li>
+<li>Amazon Builders’ Library, Going faster with continuous delivery: <a href="https://aws.amazon.com/builders-library/going-faster-with-continuous-delivery/" target="_blank" rel="noopener">https://aws.amazon.com/builders-library/going-faster-with-continuous-delivery/</a></li>
+<li>AWS Developers Podcast, Episode 015 (Oct 2021) - DevOps at Amazon with Clare Liguori: <a href="https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5zb3VuZGNsb3VkLmNvbS91c2Vycy9zb3VuZGNsb3VkOnVzZXJzOjk5NDM2MzU0OS9zb3VuZHMucnNz/episode/dGFnOnNvdW5kY2xvdWQsMjAxMDp0cmFja3MvMTEzNjE0MDA4Nw" target="_blank" rel="noopener">https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5zb3VuZGNsb3VkLmNvbS91c2Vycy9zb3VuZGNsb3VkOnVzZXJzOjk5NDM2MzU0OS9zb3VuZHMucnNz/episode/dGFnOnNvdW5kY2xvdWQsMjAxMDp0cmFja3MvMTEzNjE0MDA4Nw</a></li>
+<li>AWS Online Tech Talks, Feb 2019 | DevOps at Amazon with Ken Exner, GM of AWS Developer Tools: <a href="https://www.youtube.com/watch?v=FlZm3nFMIAM" target="_blank" rel="noopener">https://www.youtube.com/watch?v=FlZm3nFMIAM</a></li>
+<li>AWS Public Sector Summit 2018 | DevOps Culture at Amazon: <a href="https://www.youtube.com/watch?v=mBU3AJ3j1rg" target="_blank" rel="noopener">https://www.youtube.com/watch?v=mBU3AJ3j1rg</a></li>
+<li>AWS re:Invent 2015 | DevOps at Amazon: A Look at Our Tools and Processes: <a href="https://www.youtube.com/watch?v=esEFaY0FDKc" target="_blank" rel="noopener">https://www.youtube.com/watch?v=esEFaY0FDKc</a></li>
+<li>How Amazon deploys new software to production every 11.6 seconds. Velocity 2011: Jon Jenkins, “Velocity Culture”: <a href="https://www.youtube.com/watch?v=dxk8b9rSKOo" target="_blank" rel="noopener">https://www.youtube.com/watch?v=dxk8b9rSKOo</a></li>
+</ul>
+</li>
+<li>9 Metrics DevOps Teams Should be Tracking: <a href="http://www.datical.com/blog/9-metrics-devops-teams-tracking/" target="_blank" rel="noopener">http://www.datical.com/blog/9-metrics-devops-teams-tracking/</a></li>
+</ul>
+<p><img class="emoji" alt=":scroll:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/scroll.png"> <strong>The milestones of DevOps culture</strong></p>
+<ul>
+<li>The History of DevOps by Damon Edwards: : <a href="http://itrevolution.com/the-history-of-devops/" target="_blank" rel="noopener">http://itrevolution.com/the-history-of-devops/</a></li>
+<li>2008 - Agile Conference in Toronto, ON. Andrew Schafer posted an offer to moderate an ad hoc “Birds of a Feather” meeting to discuss the topic of “<strong>Agile Infrastructure</strong>.” The aim of the session is to brainstorm bridging the gap between the Development and the Operations. The only person who attends the session is Patrick Debois.</li>
+<li>2009 - O’Reilly Velocity Conference in San Jose, CA. Two Flickr employees—John Allspaw, SVP of technical operations, and Paul Hammond, director of engineering—gave a now-famous groundbreaking presentation titled, “<strong>10+ Deploys per Day: Dev and Ops Cooperation at Flickr.</strong>” They discuss what later becomes known as the DevOps culture as well as the best practices like one-step deploy, feature switches, dark launches, shared metrics, etc. Watch their presentation: <a href="https://youtu.be/LdOe18KhtT4?t=205" target="_blank" rel="noopener">https://youtu.be/LdOe18KhtT4?t=205</a></li>
+<li>2009 - Patrick Debois kicks off first Devopsdays conference in Ghent, Belgium: <a href="https://www.devopsdays.org" target="_blank" rel="noopener">https://www.devopsdays.org</a>. The term “<strong>DevOps</strong>” had been officially coined.</li>
+<li>2013 - Gene Kim, Kevin Behr and George Spafford publish “<strong>The Phoenix Project: A Novel about IT, DevOps, and Helping Your Business Win</strong>”: <a href="https://www.amazon.com/Phoenix-Project-DevOps-Helping-Business/dp/0988262592" target="_blank" rel="noopener">https://www.amazon.com/Phoenix-Project-DevOps-Helping-Business/dp/0988262592</a></li>
+<li>2016 - Gene Kim, Patrick Debois, John Willis and Jez Humble publish “<strong>The DevOps Handbook - How to Create World-Class Agility, Reliability, and Security in Technology Organizations</strong>”. The second edition of the book has been published in 2021: <a href="https://www.amazon.com/DevOps-Handbook-World-Class-Reliability-Organizations-dp-1950508404/dp/1950508404/" target="_blank" rel="noopener">https://www.amazon.com/DevOps-Handbook-World-Class-Reliability-Organizations-dp-1950508404/dp/1950508404/</a></li>
+<li>2022 - The State of DevOps report by Puppet states “<em><strong>many of the teams that are ‘doing DevOps’ well don’t even talk about DevOps anymore—it’s simply how they work.</strong></em>” A reference to this and other reports can be found here: <a href="https://www.bmc.com/blogs/state-of-devops/" target="_blank" rel="noopener">https://www.bmc.com/blogs/state-of-devops/</a></li>
+</ul>
+<p><img class="emoji" alt=":bulb:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/bulb.png"> <strong>See Also</strong></p>
+<ul>
+<li>AWS DevOps Blog: <a href="https://aws.amazon.com/blogs/devops/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/devops/</a></li>
+<li>An Introduction to Trending Ops – SysOps, DataOps, DevSecOps, AIOps, ITOps: <a href="https://geekflare.com/what-is-sysops-dataops-devops-aiops-itops/" target="_blank" rel="noopener">https://geekflare.com/what-is-sysops-dataops-devops-aiops-itops/</a></li>
+<li>Mark Schwartz, the head of Citizenship and Immigration Services with the US Department of Homeland Security discusses how CIS initially fit DevOps inside of a strict waterfall model mandated by DHS regulations: <a href="https://www.youtube.com/watch?v=QwHVlJtqhaI" target="_blank" rel="noopener">https://www.youtube.com/watch?v=QwHVlJtqhaI</a></li>
+</ul>
+<p><img class="emoji" alt=":smiley:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/smiley.png"> <strong>DevOps humour</strong></p>
+<ul>
+<li>Let’s deploy to production (or why we need DevOps): <a href="https://youtu.be/5p8wTOr8AbU" target="_blank" rel="noopener">https://youtu.be/5p8wTOr8AbU</a></li>
+</ul>
+</div><div class="embed-note"><h2 id="-Developer’s-toolset" data-id="-Developer’s-toolset"><a class="anchor hidden-xs" href="#-Developer’s-toolset" title="-Developer’s-toolset"><span class="octicon octicon-link"></span></a><img src="https://i.imgur.com/Q0OeQf5.png" alt="drawing" width="40"> Developer’s toolset</h2>
+<p><img class="emoji" alt=":pushpin:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/pushpin.png"> <strong>Important facts</strong></p>
+<div class="alert alert-info">
+<ul class="contains-task-list">
+<li class="task-list-item enabled"><input class="task-list-item-checkbox" checked="" type="checkbox" disabled="disabled"> API throttling is the process of limiting the number of API requests a user can make in a certain period. The HTTP 429 Too Many Requests response status code indicates the user has sent too many requests in a given amount of time.</li>
+</ul>
+</div>
+<p><img class="emoji" alt=":fire:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/fire.png"> <strong>What’s new?</strong></p>
+<ul>
+<li>Introducing AWS Application Composer (Preview): <a href="https://aws.amazon.com/about-aws/whats-new/2022/12/aws-application-composer-preview/" target="_blank" rel="noopener">https://aws.amazon.com/about-aws/whats-new/2022/12/aws-application-composer-preview/</a></li>
+<li>Announcing Amazon CodeCatalyst, a Unified Software Development Service (Preview): <a href="https://aws.amazon.com/blogs/aws/announcing-amazon-codecatalyst-preview-a-unified-software-development-service/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/aws/announcing-amazon-codecatalyst-preview-a-unified-software-development-service/</a></li>
+<li>Introducing Amazon CodeWhisperer, the ML-powered coding companion: <a href="https://aws.amazon.com/blogs/machine-learning/introducing-amazon-codewhisperer-the-ml-powered-coding-companion/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/machine-learning/introducing-amazon-codewhisperer-the-ml-powered-coding-companion/</a>
+<ul>
+<li>Setting up Amazon CodeWhisperer with Lambda: <a href="https://docs.aws.amazon.com/lambda/latest/dg/codewhisperer-setup.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/lambda/latest/dg/codewhisperer-setup.html</a></li>
+<li>Setting up CodeWhisperer with AWS Cloud9: <a href="https://docs.aws.amazon.com/cloud9/latest/user-guide/codewhisperer-setup.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/cloud9/latest/user-guide/codewhisperer-setup.html</a></li>
+</ul>
+</li>
+<li>AWS Cloud Control API, a Uniform API to Access AWS &amp; Third-Party Services: <a href="https://aws.amazon.com/blogs/aws/announcing-aws-cloud-control-api/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/aws/announcing-aws-cloud-control-api/</a>
+<ul>
+<li>The Official AWS Podcast #506, AWS Cloud Control API: <a href="https://aws.amazon.com/podcasts/506-aws-cloud-control-api/" target="_blank" rel="noopener">https://aws.amazon.com/podcasts/506-aws-cloud-control-api/</a></li>
+<li>AWS Resource types that support Cloud Control API: <a href="https://docs.aws.amazon.com/cloudcontrolapi/latest/userguide/supported-resources.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/cloudcontrolapi/latest/userguide/supported-resources.html</a></li>
+</ul>
+</li>
+<li>Announcing General Availability of Construct Hub and AWS Cloud Development Kit Version 2: <a href="https://aws.amazon.com/blogs/aws/announcing-general-availability-of-construct-hub-and-aws-cloud-development-kit-version-2/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/aws/announcing-general-availability-of-construct-hub-and-aws-cloud-development-kit-version-2/</a></li>
+<li>Announcing Amazon Corretto 17 support roadmap: <a href="https://aws.amazon.com/blogs/opensource/announcing-amazon-corretto-17-support-roadmap/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/opensource/announcing-amazon-corretto-17-support-roadmap/</a></li>
+<li>AWS Cloud9 now provides enhanced support for Java development: <a href="https://docs.aws.amazon.com/cloud9/latest/user-guide/enhanced-java.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/cloud9/latest/user-guide/enhanced-java.html</a></li>
+</ul>
+<p><img class="emoji" alt=":sparkles:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/sparkles.png"> <strong>Recommended</strong></p>
+<ul>
+<li>Tools to Build on AWS: <a href="https://aws.amazon.com/tools/" target="_blank" rel="noopener">https://aws.amazon.com/tools/</a></li>
+<li>AWS Service endpoints and quotas: <a href="https://docs.aws.amazon.com/general/latest/gr/aws-service-information.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/general/latest/gr/aws-service-information.html</a></li>
+<li>Signature Version 4 Signing Process: <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html</a></li>
+<li>Types of AWS APIs, Amazon S3 example:
+<ul>
+<li>Amazon S3 REST API: <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/Welcome.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AmazonS3/latest/API/Welcome.html</a></li>
+<li>AWS Java SDK, low-level API: <a href="https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/s3/AmazonS3Client.html#putObject-com.amazonaws.services.s3.model.PutObjectRequest-" target="_blank" rel="noopener">https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/s3/AmazonS3Client.html#putObject-com.amazonaws.services.s3.model.PutObjectRequest-</a></li>
+<li>AWS Java SDK, high-level API: <a href="https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/s3/transfer/TransferManager.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/s3/transfer/TransferManager.html</a></li>
+<li>AWS Cloud Control API: <a href="https://docs.aws.amazon.com/cloudcontrolapi/index.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/cloudcontrolapi/index.html</a></li>
+</ul>
+</li>
+<li>Language Support in the AWS Cloud9 IDE: <a href="https://docs.aws.amazon.com/cloud9/latest/user-guide/language-support.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/cloud9/latest/user-guide/language-support.html</a>
+<ul>
+<li>Tutorials and samples for AWS Cloud9: <a href="https://docs.aws.amazon.com/cloud9/latest/user-guide/tutorials.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/cloud9/latest/user-guide/tutorials.html</a></li>
+</ul>
+</li>
+<li>Automate code reviews with Amazon CodeGuru Reviewer: <a href="https://aws.amazon.com/blogs/devops/automate-code-reviews-with-amazon-codeguru-reviewer/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/devops/automate-code-reviews-with-amazon-codeguru-reviewer/</a></li>
+<li>Locking API Versions: <a href="https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/locking-api-versions.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/locking-api-versions.html</a></li>
+<li>Enabling Metrics for the AWS SDK: <a href="https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/generating-sdk-metrics.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/generating-sdk-metrics.html</a></li>
+<li>How to filter an AWS CLI command output with the --query option: <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-output.html#cli-usage-output-filter" target="_blank" rel="noopener">https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-output.html#cli-usage-output-filter</a>
+<ul>
+<li>JMESPath is a query language for JSON, see it is action: <a href="http://jmespath.org/" target="_blank" rel="noopener">http://jmespath.org/</a></li>
+</ul>
+</li>
+<li>AWS CDK
+<ul>
+<li>API Reference: <a href="https://docs.aws.amazon.com/cdk/api/latest/docs/aws-construct-library.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/cdk/api/latest/docs/aws-construct-library.html</a></li>
+<li>The AWS Solutions Konstruk Library (Konstruk) is an open-source extension of the AWS Cloud Development Kit (AWS CDK) that provides multi-service, well-architected patterns for quickly defining solutions in code to create predictable and repeatable infrastructure. The goal is to accelerate the experience for developers to build solutions of any size using pattern-based definitions for their architecture: <a href="http://docs.awssolutionsbuilder.com/aws-solutions-konstruk/latest/" target="_blank" rel="noopener">http://docs.awssolutionsbuilder.com/aws-solutions-konstruk/latest/</a></li>
+</ul>
+</li>
+<li>Use AWS services locally for testing:
+<ul>
+<li>LocalStack - Develop and test your cloud apps offline: <a href="https://localstack.cloud/" target="_blank" rel="noopener">https://localstack.cloud/</a></li>
+<li>Setting Up DynamoDB Local: <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html</a></li>
+<li>AWS SAM Local – Build and Test Serverless Applications Locally: <a href="https://aws.amazon.com/blogs/aws/new-aws-sam-local-beta-build-and-test-serverless-applications-locally/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/aws/new-aws-sam-local-beta-build-and-test-serverless-applications-locally/</a></li>
+</ul>
+</li>
+<li>Tools for creating AWS diagrams:
+<ul>
+<li>AWS Architecture Icons | The official AWS icon set for building architecture diagrams: <a href="https://aws.amazon.com/architecture/icons/" target="_blank" rel="noopener">https://aws.amazon.com/architecture/icons/</a></li>
+<li><a href="http://Draw.io" target="_blank" rel="noopener">Draw.io</a>, a free online diagram tool: <a href="https://app.diagrams.net/?splash=0&amp;libs=aws4" target="_blank" rel="noopener">https://app.diagrams.net/?splash=0&amp;libs=aws4</a></li>
+</ul>
+</li>
+</ul>
+<p><img class="emoji" alt=":bulb:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/bulb.png"> <strong>See Also</strong></p>
+<ul>
+<li>AWS Developer Tools Blog: <a href="https://aws.amazon.com/blogs/developer/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/developer/</a></li>
+</ul>
+<p><img class="emoji" alt=":keyboard:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/keyboard.png"> Hands-on:</p>
+<ul>
+<li>AWS CDK Intro Workshop: <a href="https://cdkworkshop.com/" target="_blank" rel="noopener">https://cdkworkshop.com/</a></li>
+<li>Amazon Rekognition CLI demo: <a href="https://github.com/realokun/aws/tree/master/rekognition" target="_blank" rel="noopener">https://github.com/realokun/aws/tree/master/rekognition</a></li>
+</ul>
+</div><div class="embed-note"><h2 id="-AWS-Identity-and-Access-Management-IAM" data-id="-AWS-Identity-and-Access-Management-IAM"><a class="anchor hidden-xs" href="#-AWS-Identity-and-Access-Management-IAM" title="-AWS-Identity-and-Access-Management-IAM"><span class="octicon octicon-link"></span></a><img src="https://i.imgur.com/pgkRQ6H.png" alt="drawing" width="40"> AWS Identity and Access Management (IAM)</h2>
+<p><img class="emoji" alt=":pushpin:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/pushpin.png"> <strong>Important facts</strong></p>
+<div class="alert alert-info">
+<ul class="contains-task-list">
+<li class="task-list-item enabled"><input class="task-list-item-checkbox" checked="" type="checkbox" disabled="disabled"> The supported IAM features by AWS services: <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-services-that-work-with-iam.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-services-that-work-with-iam.html</a></li>
+</ul>
+</div>
+<p><img class="emoji" alt=":fire:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/fire.png"> <strong>What’s new?</strong></p>
+<ul>
+<li>IAM Access Analyzer makes it easier to implement least privilege permissions by generating IAM policies based on access activity: <a href="https://aws.amazon.com/blogs/security/iam-access-analyzer-makes-it-easier-to-implement-least-privilege-permissions-by-generating-iam-policies-based-on-access-activity/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/security/iam-access-analyzer-makes-it-easier-to-implement-least-privilege-permissions-by-generating-iam-policies-based-on-access-activity/</a></li>
+<li>AWS IAM policy simulator now simulates permissions boundary policies: <a href="https://aws.amazon.com/about-aws/whats-new/2020/01/aws-iam-policy-simulator-now-simulates-permissions-boundary-policies/" target="_blank" rel="noopener">https://aws.amazon.com/about-aws/whats-new/2020/01/aws-iam-policy-simulator-now-simulates-permissions-boundary-policies/</a></li>
+<li>For the complete list of announcements: <a href="https://aws.amazon.com/new/?awsf.whats-new-products=general-products%23aws-iam" target="_blank" rel="noopener">https://aws.amazon.com/new/?awsf.whats-new-products=general-products%23aws-iam</a></li>
+</ul>
+<p><img class="emoji" alt=":sparkles:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/sparkles.png"> <strong>Recommended</strong></p>
+<ul>
+<li>Understanding how IAM works: <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/intro-structure.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/IAM/latest/UserGuide/intro-structure.html</a></li>
+<li>The types of AWS security credentials: <a href="https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html</a></li>
+<li>Signing AWS API requests: <a href="https://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html</a></li>
+<li>IAM Policies:
+<ul>
+<li>Policies and permissions in IAM: <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html</a></li>
+<li>IAM JSON Policy Elements Reference: <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements.html</a></li>
+<li>Global condition context keys in IAM: <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html</a></li>
+<li>Variables in AWS Access Control Policies: <a href="https://aws.amazon.com/blogs/aws/variables-in-aws-access-control-policies/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/aws/variables-in-aws-access-control-policies/</a></li>
+<li>Policy evaluation logic in IAM: <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html</a></li>
+</ul>
+</li>
+<li>AWS tasks that require AWS account root user credentials: <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html</a></li>
+<li>I published my AWS Access Key to GitHub: <a href="https://www.dannyguo.com/blog/i-published-my-aws-secret-key-to-github/" target="_blank" rel="noopener">https://www.dannyguo.com/blog/i-published-my-aws-secret-key-to-github/</a></li>
+<li>Creating a URL that Enables Federated Users to Access the AWS Management Console: <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-custom-url.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-custom-url.html</a></li>
+<li>Permissions Boundaries for IAM Entities: <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html</a></li>
+<li>Using MFA with API calls: <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_configure-api-require.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_configure-api-require.html</a></li>
+<li>Deep dive on EC2 instance metadata: <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html</a></li>
+<li>The following metadata contains security credentials for an IAM role assumed by an EC2:</li>
+</ul>
+<pre><code class="shell hljs"><div class="wrapper"><div class="gutter linenumber"><span></span></div><div class="code"><span class="hljs-meta">$ </span><span class="language-bash">curl http://169.254.169.254/latest/meta-data/iam/security-credentials/&lt;rolename&gt;</span>
+</div></div></code></pre>
+<p><img class="emoji" alt=":keyboard:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/keyboard.png"> Hands-on:</p>
+<ul>
+<li>IAM Policy Simulator: <a href="https://policysim.aws.amazon.com/home/index.jsp" target="_blank" rel="noopener">https://policysim.aws.amazon.com/home/index.jsp</a></li>
+</ul>
+<p><img class="emoji" alt=":smiley:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/smiley.png"> <strong>The fun way to learn</strong></p>
+<ul>
+<li>A real-world analogy to the IAM Roles: <a href="https://youtu.be/KONoeHwu2pg?t=25" target="_blank" rel="noopener">https://youtu.be/KONoeHwu2pg?t=25</a></li>
+</ul>
+</div><div class="embed-note"><h2 id="-Application-Security" data-id="-Application-Security"><a class="anchor hidden-xs" href="#-Application-Security" title="-Application-Security"><span class="octicon octicon-link"></span></a><img src="https://i.imgur.com/NoIrhG1.png" alt="drawing" width="40"> Application Security</h2>
+<p><img class="emoji" alt=":fire:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/fire.png"> <strong>What’s new?</strong></p>
+<ul>
+<li>Amazon CodeGuru Reviewer Introduces Secrets Detector to Identify Hardcoded Secrets and Secure Them with AWS Secrets Manager: <a href="https://aws.amazon.com/blogs/aws/codeguru-reviewer-secrets-detector-identify-hardcoded-secrets/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/aws/codeguru-reviewer-secrets-detector-identify-hardcoded-secrets/</a></li>
+</ul>
+<p><img class="emoji" alt=":sparkles:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/sparkles.png"> <strong>Recommended</strong></p>
+<ul>
+<li>How to approach threat modeling: <a href="https://aws.amazon.com/blogs/security/how-to-approach-threat-modeling/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/security/how-to-approach-threat-modeling/</a></li>
+<li>Open Web Application Security Project (OWASP) Threat Modeling Cheat Sheet: <a href="https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html" target="_blank" rel="noopener">https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html</a></li>
+<li>Frameworks for identifying the threats:
+<ul>
+<li>STRIDE (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, and Elevation of Privilege): <a href="https://threat-modeling.com/stride-threat-modeling/" target="_blank" rel="noopener">https://threat-modeling.com/stride-threat-modeling/</a></li>
+<li>OWASP Top 10: <a href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener">https://owasp.org/www-project-top-ten/</a></li>
+<li>HiTrust Threat Catalogue: <a href="https://hitrustalliance.net/hitrust-threat-catalogue/" target="_blank" rel="noopener">https://hitrustalliance.net/hitrust-threat-catalogue/</a></li>
+</ul>
+</li>
+<li>Encryption and Key Management in AWS: <a href="https://www.youtube.com/watch?v=uhXalpNzPU4" target="_blank" rel="noopener">https://www.youtube.com/watch?v=uhXalpNzPU4</a></li>
+<li>AWS Certificate Manager (ACM) FAQs: <a href="https://aws.amazon.com/certificate-manager/faqs/" target="_blank" rel="noopener">https://aws.amazon.com/certificate-manager/faqs/</a></li>
+<li>AWS Secrets Manager FAQs: <a href="https://aws.amazon.com/secrets-manager/faqs/" target="_blank" rel="noopener">https://aws.amazon.com/secrets-manager/faqs/</a></li>
+</ul>
+</div><div class="embed-note"><h2 id="-Data-Security" data-id="-Data-Security"><a class="anchor hidden-xs" href="#-Data-Security" title="-Data-Security"><span class="octicon octicon-link"></span></a><img src="https://i.imgur.com/EZ1MH8w.png" alt="drawing" width="40"> Data Security</h2>
+<p><img class="emoji" alt=":fire:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/fire.png"> <strong>What’s new?</strong></p>
+<ul>
+<li>Digital signing with the new asymmetric keys feature of AWS KMS: <a href="https://aws.amazon.com/blogs/security/digital-signing-asymmetric-keys-aws-kms/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/security/digital-signing-asymmetric-keys-aws-kms/</a></li>
+</ul>
+<p><img class="emoji" alt=":sparkles:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/sparkles.png"> <strong>Recommended</strong></p>
+<ul>
+<li>AWS Encryption SDK is a client-side encryption library: <a href="https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/introduction.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/introduction.html</a></li>
+<li>Amazon S3
+<ul>
+<li>Protecting Amazon S3 data using encryption: <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingEncryption.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingEncryption.html</a></li>
+<li>Access policy guidelines: <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-policy-alternatives-guidelines.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-policy-alternatives-guidelines.html</a></li>
+<li>Example walkthroughs: Managing access to your Amazon S3 resources: <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-walkthroughs-managing-access.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-walkthroughs-managing-access.html</a></li>
+<li>Amazon S3 Object Lock: <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock-overview.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock-overview.html</a></li>
+<li>Amazon S3 Block Public Access:
+<a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html</a></li>
+<li>How to Prevent Uploads of Unencrypted Objects to Amazon S3: <a href="https://aws.amazon.com/blogs/security/how-to-prevent-uploads-of-unencrypted-objects-to-amazon-s3/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/security/how-to-prevent-uploads-of-unencrypted-objects-to-amazon-s3/</a></li>
+</ul>
+</li>
+<li>Amazon S3 Glacier vault locks: <a href="https://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock.html</a></li>
+<li>Amazon DynamoDB
+<ul>
+<li>Client-side and server-side encryption: <a href="https://docs.aws.amazon.com/dynamodb-encryption-client/latest/devguide/client-server-side.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/dynamodb-encryption-client/latest/devguide/client-server-side.html</a></li>
+<li>DynamoDB SSE with AWS KMS: <a href="https://docs.aws.amazon.com/kms/latest/developerguide/services-dynamodb.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/kms/latest/developerguide/services-dynamodb.html</a></li>
+<li>Using IAM Policy Conditions for Fine-Grained Access Control for Amazon DynamoDB: <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html</a></li>
+<li>DynamoDB encryption options: <a href="https://docs.aws.amazon.com/dynamodb-encryption-client/latest/devguide/client-server-side.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/dynamodb-encryption-client/latest/devguide/client-server-side.html</a></li>
+</ul>
+</li>
+<li>AWS storage devices decommissioning procedures:
+<ul>
+<li>DoD 5220.22-M National Industrial Security Program Operating Manual (NISPOM) January 1995: <a href="https://www.dami.army.pentagon.mil/site/IndustSec/docs/DoD%20522022-m.pdf" target="_blank" rel="noopener">https://www.dami.army.pentagon.mil/site/IndustSec/docs/DoD 522022-m.pdf</a></li>
+<li>NIST 800-88, “Guidelines for Media Sanitization”: <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-88r1.pdf" target="_blank" rel="noopener">https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-88r1.pdf</a></li>
+</ul>
+</li>
+<li>Law Enforcement Information Requests: <a href="https://aws.amazon.com/compliance/amazon-information-requests/" target="_blank" rel="noopener">https://aws.amazon.com/compliance/amazon-information-requests/</a></li>
+</ul>
+<p><img class="emoji" alt=":bulb:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/bulb.png"> <strong>See Also</strong></p>
+<h4 id="KMS-Envelope-Encryption" data-id="KMS-Envelope-Encryption"><a class="anchor hidden-xs" href="#KMS-Envelope-Encryption" title="KMS-Envelope-Encryption"><span class="octicon octicon-link"></span></a>KMS Envelope Encryption</h4>
+<p>Encryption</p>
+<ol>
+<li>API request is sent to KMS to generate Data key using CMK.</li>
+<li>KMS returns response with Plain Data key and Encrypted Data key (using CMK).</li>
+<li>Data is encrypted using Plain Data key.</li>
+<li>Plain Data key is removed from memory.</li>
+<li>Encrypted Data and Encrypted Data Key is packaged together as envelope and stored.</li>
+</ol>
+<p>Decryption</p>
+<ol>
+<li>Encrypted Data key is extracted from envelope.</li>
+<li>API request is sent to KMS using Encrypted Data key which has information about CMK to be used in KMS for decryption.</li>
+<li>KMS returns response with Plain Data Key.</li>
+<li>Encrypted Data is decrypted using Plain Data key.</li>
+<li>Plain Data Key is removed from memory.</li>
+</ol>
+</div><div class="embed-note"><h2 id="-Network-Security" data-id="-Network-Security"><a class="anchor hidden-xs" href="#-Network-Security" title="-Network-Security"><span class="octicon octicon-link"></span></a><img src="https://i.imgur.com/kKORtpw.png" alt="drawing" width="40"> Network Security</h2>
+<p><img class="emoji" alt=":fire:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/fire.png"> <strong>What’s new?</strong></p>
+<ul>
+<li>New – Amazon VPC Network Access Analyzer: <a href="https://aws.amazon.com/blogs/aws/new-amazon-vpc-network-access-analyzer/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/aws/new-amazon-vpc-network-access-analyzer/</a></li>
+<li>New – TLS Termination for Network Load Balancers: <a href="https://aws.amazon.com/blogs/aws/new-tls-termination-for-network-load-balancers/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/aws/new-tls-termination-for-network-load-balancers/</a></li>
+</ul>
+<p><img class="emoji" alt=":sparkles:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/sparkles.png"> <strong>Recommended</strong></p>
+<ul>
+<li>Control traffic to subnets with Network ACLs: <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html</a></li>
+<li>Control traffic to resources using security groups: <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html</a></li>
+<li>What is Traffic Mirroring? <a href="https://docs.aws.amazon.com/vpc/latest/mirroring/what-is-traffic-mirroring.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/vpc/latest/mirroring/what-is-traffic-mirroring.html</a></li>
+<li>Building a Scalable and Secure Multi-VPC AWS Network Infrastructure: <a href="https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/welcome.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/welcome.html</a></li>
+<li>AWS PrivateLink and VPC endpoints: <a href="https://docs.aws.amazon.com/vpc/latest/privatelink/endpoint-services-overview.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/vpc/latest/privatelink/endpoint-services-overview.html</a></li>
+<li>AWS Interface Endpoint vs Gateway Endpoint: <a href="https://www.linkedin.com/pulse/aws-interface-endpoint-vs-gateway-alex-chang/" target="_blank" rel="noopener">https://www.linkedin.com/pulse/aws-interface-endpoint-vs-gateway-alex-chang/</a></li>
+<li>AWS Site-to-Site VPN vs AWS Client VPN? <a href="https://serverfault.com/questions/1009969/what-is-the-difference-between-aws-site-to-site-vpn-and-aws-client-vpn" target="_blank" rel="noopener">https://serverfault.com/questions/1009969/what-is-the-difference-between-aws-site-to-site-vpn-and-aws-client-vpn</a></li>
+<li>What is a transit gateway? <a href="https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html</a></li>
+</ul>
+<h3 id="Hybrid-Environments" data-id="Hybrid-Environments"><a class="anchor hidden-xs" href="#Hybrid-Environments" title="Hybrid-Environments"><span class="octicon octicon-link"></span></a>Hybrid Environments</h3>
+<ul>
+<li>AWS Direct Connect Locations: <a href="https://aws.amazon.com/directconnect/locations/" target="_blank" rel="noopener">https://aws.amazon.com/directconnect/locations/</a></li>
+<li>AWS Direct Connect Resiliency Recommendations: <a href="https://aws.amazon.com/directconnect/resiliency-recommendation/" target="_blank" rel="noopener">https://aws.amazon.com/directconnect/resiliency-recommendation/</a></li>
+<li>AWS Direct Connect vs VPN vs Direct Connect Gateway: <a href="https://medium.com/@datapath_io/aws-direct-connect-vs-vpn-vs-direct-connect-gateway-97900cdf7d04" target="_blank" rel="noopener">https://medium.com/@datapath_io/aws-direct-connect-vs-vpn-vs-direct-connect-gateway-97900cdf7d04</a></li>
+<li>Download the official OpenVPN Connect client software: <a href="https://openvpn.net/vpn-client/" target="_blank" rel="noopener">https://openvpn.net/vpn-client/</a></li>
+</ul>
+</div><div class="embed-note"><h2 id="-Security-at-Edge" data-id="-Security-at-Edge"><a class="anchor hidden-xs" href="#-Security-at-Edge" title="-Security-at-Edge"><span class="octicon octicon-link"></span></a><img src="https://i.imgur.com/UYYTKVz.png" alt="drawing" width="40"> Security at Edge</h2>
+<p><img class="emoji" alt=":fire:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/fire.png"> <strong>What’s new?</strong></p>
+<ul>
+<li>Amazon CloudFront launches Origin Access Control (OAC): <a href="https://aws.amazon.com/about-aws/whats-new/2022/08/amazon-cloudfront-origin-access-control/" target="_blank" rel="noopener">https://aws.amazon.com/about-aws/whats-new/2022/08/amazon-cloudfront-origin-access-control/</a></li>
+<li>AWS WAF introduces AWS WAF Fraud Control - Account Takeover Prevention for protecting your login page against credential stuffing attacks: <a href="https://aws.amazon.com/about-aws/whats-new/2022/02/aws-waf-fraud-control-login-credential-attacks/" target="_blank" rel="noopener">https://aws.amazon.com/about-aws/whats-new/2022/02/aws-waf-fraud-control-login-credential-attacks/</a></li>
+<li>AWS WAF adds support for Captcha: <a href="https://aws.amazon.com/about-aws/whats-new/2021/11/aws-waf-captcha-support/" target="_blank" rel="noopener">https://aws.amazon.com/about-aws/whats-new/2021/11/aws-waf-captcha-support/</a></li>
+</ul>
+<p><img class="emoji" alt=":sparkles:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/sparkles.png"> <strong>Recommended</strong></p>
+<ul>
+<li>AWS Best Practices for DDoS Resiliency: <a href="https://d1.awsstatic.com/whitepapers/Security/DDoS_White_Paper.pdf" target="_blank" rel="noopener">https://d1.awsstatic.com/whitepapers/Security/DDoS_White_Paper.pdf</a></li>
+<li>Amazon CloudFront
+<ul>
+<li>Restricting access to an Amazon S3 origin: <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html</a></li>
+<li>Using signed URLs: <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-signed-urls.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-signed-urls.html</a></li>
+<li>Using signed cookies: <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-signed-cookies.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-signed-cookies.html</a></li>
+<li>How to Enhance the Security of Sensitive Customer Data by Using Amazon CloudFront Field-Level Encryption: <a href="https://aws.amazon.com/blogs/security/how-to-enhance-the-security-of-sensitive-customer-data-by-using-amazon-cloudfront-field-level-encryption/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/security/how-to-enhance-the-security-of-sensitive-customer-data-by-using-amazon-cloudfront-field-level-encryption/</a></li>
+<li>Using field-level encryption to help protect sensitive data: <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/field-level-encryption.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/field-level-encryption.html</a></li>
+</ul>
+</li>
+<li>AWS Shield is a managed DDoS protection service that safeguards applications running on AWS: <a href="https://aws.amazon.com/shield/faqs/" target="_blank" rel="noopener">https://aws.amazon.com/shield/faqs/</a>
+<ul>
+<li>AWS Shield Advanced: <a href="https://docs.aws.amazon.com/waf/latest/developerguide/ddos-advanced-summary-capabilities.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/waf/latest/developerguide/ddos-advanced-summary-capabilities.html</a></li>
+</ul>
+</li>
+<li>How AWS WAF works: <a href="https://docs.aws.amazon.com/waf/latest/developerguide/how-aws-waf-works.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/waf/latest/developerguide/how-aws-waf-works.html</a>
+<ul>
+<li>Use AWS WAF to Mitigate OWASP’s Top 10 Web Application Vulnerabilities: <a href="https://d0.awsstatic.com/whitepapers/Security/aws-waf-owasp.pdf" target="_blank" rel="noopener">https://d0.awsstatic.com/whitepapers/Security/aws-waf-owasp.pdf</a></li>
+</ul>
+</li>
+<li>Amazon Route 53
+<ul>
+<li>How internet traffic is routed to your website or web application: <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/welcome-dns-service.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/welcome-dns-service.html</a></li>
+<li>Shuffle Sharding - Massive and Magical Fault Isolation: <a href="https://aws.amazon.com/blogs/architecture/shuffle-sharding-massive-and-magical-fault-isolation/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/architecture/shuffle-sharding-massive-and-magical-fault-isolation/</a></li>
+<li>How to Help Protect Dynamic Web Applications Against DDoS Attacks by Using Amazon CloudFront and Amazon Route 53: <a href="https://aws.amazon.com/blogs/security/how-to-protect-dynamic-web-applications-against-ddos-attacks-by-using-amazon-cloudfront-and-amazon-route-53/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/security/how-to-protect-dynamic-web-applications-against-ddos-attacks-by-using-amazon-cloudfront-and-amazon-route-53/</a></li>
+<li>A Case Study in Global Fault Isolation: <a href="https://aws.amazon.com/blogs/architecture/a-case-study-in-global-fault-isolation/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/architecture/a-case-study-in-global-fault-isolation/</a></li>
+</ul>
+</li>
+</ul>
+<p><img class="emoji" alt=":bulb:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/bulb.png"> See also</p>
+<ul>
+<li>What is a DDoS attack? <a href="https://www.cloudflare.com/learning/ddos/what-is-a-ddos-attack/" target="_blank" rel="noopener">https://www.cloudflare.com/learning/ddos/what-is-a-ddos-attack/</a></li>
+<li>DDoS Attack Detection at Scale: <a href="https://www.youtube.com/watch?v=2lAcE3NA2UU&amp;list=PLtsUi0RJikGL6GKWwnlldsnE00nN3w88d&amp;index=76&amp;t=0s" target="_blank" rel="noopener">https://www.youtube.com/watch?v=2lAcE3NA2UU&amp;list=PLtsUi0RJikGL6GKWwnlldsnE00nN3w88d&amp;index=76&amp;t=0s</a></li>
+<li>How does Anycast work? <a href="https://www.cloudflare.com/learning/cdn/glossary/anycast-network/" target="_blank" rel="noopener">https://www.cloudflare.com/learning/cdn/glossary/anycast-network/</a></li>
+<li>Workload isolation using shuffle-sharding: <a href="https://d1.awsstatic.com/builderslibrary/pdfs/workload-isolation-using-shuffle-sharding.pdf" target="_blank" rel="noopener">https://d1.awsstatic.com/builderslibrary/pdfs/workload-isolation-using-shuffle-sharding.pdf</a></li>
+<li>A Case Study in Global Fault Isolation: <a href="https://aws.amazon.com/blogs/architecture/a-case-study-in-global-fault-isolation/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/architecture/a-case-study-in-global-fault-isolation/</a></li>
+</ul>
+</div><div class="embed-note"><h2 id="-Amazon-Cognito" data-id="-Amazon-Cognito"><a class="anchor hidden-xs" href="#-Amazon-Cognito" title="-Amazon-Cognito"><span class="octicon octicon-link"></span></a><img src="https://i.imgur.com/ygt5HZp.png" alt="drawing" width="40"> Amazon Cognito</h2>
+<p><img class="emoji" alt=":fire:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/fire.png"> <strong>What’s new?</strong></p>
+<ul>
+<li>Amazon Cognito identity pool data events are now available in AWS CloudTrail: <a href="https://aws.amazon.com/about-aws/whats-new/2023/02/amazon-cognito-identity-pool-data-events-aws-cloudtrail/" target="_blank" rel="noopener">https://aws.amazon.com/about-aws/whats-new/2023/02/amazon-cognito-identity-pool-data-events-aws-cloudtrail/</a></li>
+<li>Amazon Cognito enables native support for AWS WAF: <a href="https://aws.amazon.com/about-aws/whats-new/2022/08/amazon-cognito-enables-native-support-aws-waf/" target="_blank" rel="noopener">https://aws.amazon.com/about-aws/whats-new/2022/08/amazon-cognito-enables-native-support-aws-waf/</a></li>
+<li>Amazon Cognito enables time-based-one-time-password (TOTP) self-enrollment in hosted UI: <a href="https://aws.amazon.com/about-aws/whats-new/2022/09/amazon-cognito-enables-time-based-one-time-password-totp-self-enrollment-hosted-ui/" target="_blank" rel="noopener">https://aws.amazon.com/about-aws/whats-new/2022/09/amazon-cognito-enables-time-based-one-time-password-totp-self-enrollment-hosted-ui/</a></li>
+</ul>
+<p><img class="emoji" alt=":sparkles:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/sparkles.png"> <strong>Recommended</strong></p>
+<ul>
+<li>Amazon Cognito User Pools Developer Guide: <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/getting-started-with-cognito-user-pools.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/cognito/latest/developerguide/getting-started-with-cognito-user-pools.html</a></li>
+<li>Amazon Cognito Identity Pools Developer Guide: <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/getting-started-with-identity-pools.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/cognito/latest/developerguide/getting-started-with-identity-pools.html</a></li>
+<li>Victor’s “Amazon Cognito pools demystified” diagram:</li>
+</ul>
+<p><img src="https://i.imgur.com/QbBqxY1.png" alt="" loading="lazy"></p>
+<ul>
+<li>What is Identity Management? What Are Directory Services? What is Federation? …and much more: <a href="https://www.youtube.com/playlist?list=PLgNdFtWZuT7a2dCb6pLqHhtzPEC4tdwH9" target="_blank" rel="noopener">https://www.youtube.com/playlist?list=PLgNdFtWZuT7a2dCb6pLqHhtzPEC4tdwH9</a></li>
+<li>Common Amazon Cognito Scenarios: <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-scenarios.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-scenarios.html</a></li>
+<li>AWS Cognito User Pools vs AWS Cognito Identity Pools:
+<ul>
+<li><a href="https://bit.ly/2Vn2r1h" target="_blank" rel="noopener">https://bit.ly/2Vn2r1h</a></li>
+<li><a href="https://bit.ly/2OOUxLA" target="_blank" rel="noopener">https://bit.ly/2OOUxLA</a></li>
+<li><a href="https://bit.ly/2uOFEzw" target="_blank" rel="noopener">https://bit.ly/2uOFEzw</a></li>
+</ul>
+</li>
+<li>How to use Amazon Cognito identity pools and user pools with API Gateway, Lambda, and IAM: <a href="https://www.youtube.com/watch?v=VZqG7HjT2AQ" target="_blank" rel="noopener">https://www.youtube.com/watch?v=VZqG7HjT2AQ</a> and the reference SpaceFinder application: <a href="https://github.com/awslabs/aws-serverless-auth-reference-app" target="_blank" rel="noopener">https://github.com/awslabs/aws-serverless-auth-reference-app</a></li>
+<li>Authenticate users using an Application Load Balancer: <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/listener-authenticate-users.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/elasticloadbalancing/latest/application/listener-authenticate-users.html</a></li>
+<li>Restrict row-level access in DynamoDB based on the user identities:
+<ul>
+<li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_dynamodb_rows.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_dynamodb_rows.html</a></li>
+<li><a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html#FGAC_DDB.ConditionKeys" target="_blank" rel="noopener">https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html#FGAC_DDB.ConditionKeys</a></li>
+</ul>
+</li>
+<li>OAuth 2.0 and OpenID Connect (in plain English): <a href="https://youtu.be/996OiexHze0" target="_blank" rel="noopener">https://youtu.be/996OiexHze0</a></li>
+<li>Dev tools:
+<ul>
+<li>OAuth 2.0 debugger: <a href="https://oauthdebugger.com/" target="_blank" rel="noopener">https://oauthdebugger.com/</a></li>
+<li>OpenID Connect debugger: <a href="https://oidcdebugger.com/" target="_blank" rel="noopener">https://oidcdebugger.com/</a></li>
+<li>JWT encoder/decoder: <a href="https://www.jsonwebtoken.io/" target="_blank" rel="noopener">https://www.jsonwebtoken.io/</a></li>
+</ul>
+</li>
+<li>How To Validate a JWT Token: <a href="https://medium.com/dataseries/public-claims-and-how-to-validate-a-jwt-1d6c81823826" target="_blank" rel="noopener">https://medium.com/dataseries/public-claims-and-how-to-validate-a-jwt-1d6c81823826</a>
+<ul>
+<li>Mapping JWT registered claims to Amazon Cognito User Pool attributes: <img src="https://i.imgur.com/eph50aB.png" alt="" loading="lazy"></li>
+</ul>
+</li>
+<li>Security Assertion Markup Language (SAML) V2.0 Technical Overview: <a href="http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0.html" target="_blank" rel="noopener">http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0.html</a></li>
+<li>Active Directory Federation Services: <a href="https://aws.amazon.com/blogs/security/tag/active-directory-federation-services/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/security/tag/active-directory-federation-services/</a></li>
+<li>Social Web Identity Providers:
+<ul>
+<li>Login with Amazon (LWA): <a href="https://developer.amazon.com/docs/login-with-amazon/minitoc-lwa-overview.html" target="_blank" rel="noopener">https://developer.amazon.com/docs/login-with-amazon/minitoc-lwa-overview.html</a></li>
+<li>Facebook Login: <a href="https://developers.facebook.com/docs/facebook-login/overview" target="_blank" rel="noopener">https://developers.facebook.com/docs/facebook-login/overview</a></li>
+<li>Google Sign-In: <a href="https://developers.google.com/identity/sign-in/web/sign-in" target="_blank" rel="noopener">https://developers.google.com/identity/sign-in/web/sign-in</a></li>
+</ul>
+</li>
+<li>SAML identity providers:
+<ul>
+<li>Microsoft Active Directory Federation Services (ADFS): <a href="https://docs.microsoft.com/en-us/previous-versions/windows/server-2008/bb897402(v=msdn.10)?redirectedfrom=MSDN" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/previous-versions/windows/server-2008/bb897402(v=msdn.10)?redirectedfrom=MSDN</a></li>
+<li>Shibboleth: <a href="https://www.shibboleth.net/" target="_blank" rel="noopener">https://www.shibboleth.net/</a></li>
+</ul>
+</li>
+<li>Amazon Cognito Identity pools: Announcing Developer Authenticated Identities: <a href="https://aws.amazon.com/blogs/mobile/amazon-cognito-announcing-developer-authenticated-identities/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/mobile/amazon-cognito-announcing-developer-authenticated-identities/</a></li>
+</ul>
+<p><img class="emoji" alt=":keyboard:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/keyboard.png"> <strong>Hands-on</strong>:</p>
+<ul>
+<li>Amazon Cognito Workshop: <a href="https://www.cognitobuilders.training/" target="_blank" rel="noopener">https://www.cognitobuilders.training/</a></li>
+<li>Add Social Sign-in to a Cognito User Pool: <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-configuring-federation-with-social-idp.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-configuring-federation-with-social-idp.html</a></li>
+<li>Web Identity Federation Playground app: <a href="https://web-identity-federation-playground.s3.amazonaws.com/index.html" target="_blank" rel="noopener">https://web-identity-federation-playground.s3.amazonaws.com/index.html</a></li>
+<li>Web Identity Federation Playground step-by-step walkthrough: <a href="https://aws.amazon.com/blogs/security/new-playground-app-to-explore-web-identity-federation-with-amazon-facebook-and-google/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/security/new-playground-app-to-explore-web-identity-federation-with-amazon-facebook-and-google/</a></li>
+</ul>
+</div><div class="embed-note"><h2 id="-Infrastructure-Automation" data-id="-Infrastructure-Automation"><a class="anchor hidden-xs" href="#-Infrastructure-Automation" title="-Infrastructure-Automation"><span class="octicon octicon-link"></span></a><img class="emoji" alt=":gear:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/gear.png"> Infrastructure Automation</h2>
+<p><img class="emoji" alt=":sparkles:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/sparkles.png"> <strong>Recommended</strong></p>
+<ul>
+<li>Infrastructure as Code: <a href="https://d1.awsstatic.com/whitepapers/DevOps/infrastructure-as-code.pdf?trk=wp_c" target="_blank" rel="noopener">https://d1.awsstatic.com/whitepapers/DevOps/infrastructure-as-code.pdf?trk=wp_c</a></li>
+</ul>
+<h2 id="-AWS-CloudFormation" data-id="-AWS-CloudFormation"><a class="anchor hidden-xs" href="#-AWS-CloudFormation" title="-AWS-CloudFormation"><span class="octicon octicon-link"></span></a><img src="https://i.imgur.com/ZIj9EEz.png" alt="drawing" width="40"> AWS CloudFormation</h2>
+<p><img class="emoji" alt=":fire:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/fire.png"> <strong>What’s new?</strong></p>
+<ul>
+<li>AWS CloudFormation announces new language extensions transform: <a href="https://aws.amazon.com/about-aws/whats-new/2022/09/aws-cloudformation-new-language-extensions-transform/" target="_blank" rel="noopener">https://aws.amazon.com/about-aws/whats-new/2022/09/aws-cloudformation-new-language-extensions-transform/</a></li>
+<li>AWS Announces the General Availability of AWS CloudFormation Hooks: <a href="https://aws.amazon.com/about-aws/whats-new/2022/02/aws-announces-general-availability-aws-cloudformation-hooks/" target="_blank" rel="noopener">https://aws.amazon.com/about-aws/whats-new/2022/02/aws-announces-general-availability-aws-cloudformation-hooks/</a>
+<ul>
+<li>Developing hooks: <a href="https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/hooks.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/hooks.html</a></li>
+</ul>
+</li>
+<li>Introducing a Public Registry for AWS CloudFormation: <a href="https://aws.amazon.com/blogs/aws/introducing-a-public-registry-for-aws-cloudformation/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/aws/introducing-a-public-registry-for-aws-cloudformation/</a></li>
+<li>Introducing AWS CloudFormation Guard 2.0: <a href="https://aws.amazon.com/blogs/mt/introducing-aws-cloudformation-guard-2-0/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/mt/introducing-aws-cloudformation-guard-2-0/</a></li>
+<li>Migrating CloudFormation templates to the AWS Cloud Development Kit: <a href="https://aws.amazon.com/blogs/developer/migrating-cloudformation-templates-to-the-aws-cloud-development-kit/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/developer/migrating-cloudformation-templates-to-the-aws-cloud-development-kit/</a></li>
+<li>Amazon CodeGuru Profiler now includes support for AWS CloudFormation: <a href="https://aws.amazon.com/about-aws/whats-new/2020/04/amazon-codeguru-profiler-now-includes-support-for-aws-cloudformation/" target="_blank" rel="noopener">https://aws.amazon.com/about-aws/whats-new/2020/04/amazon-codeguru-profiler-now-includes-support-for-aws-cloudformation/</a></li>
+<li>AWS CloudFormation Launches Resource Import: <a href="https://aws.amazon.com/about-aws/whats-new/2019/11/aws-cloudformation-launches-resource-import/" target="_blank" rel="noopener">https://aws.amazon.com/about-aws/whats-new/2019/11/aws-cloudformation-launches-resource-import/</a></li>
+</ul>
+<p><img class="emoji" alt=":sparkles:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/sparkles.png"> <strong>Recommended</strong></p>
+<ul>
+<li>A curated list of resources and projects for working with AWS CloudFormation:</li>
+<li>Sample templates: <a href="https://aws.amazon.com/cloudformation/aws-cloudformation-templates/" target="_blank" rel="noopener">https://aws.amazon.com/cloudformation/aws-cloudformation-templates/</a></li>
+<li>Template anatomy, Mappings: <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/mappings-section-structure.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/mappings-section-structure.html</a></li>
+<li>To share information between stacks, export a stack’s output values: <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-exports.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-exports.html</a></li>
+<li>CloudFormation Helper Scripts Reference: <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-helper-scripts-reference.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-helper-scripts-reference.html</a></li>
+<li>AWS CloudFormation Conditions:
+<a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/conditions-section-structure.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/conditions-section-structure.html</a></li>
+<li>AWS CloudFormation Deletion Policy:
+<a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html" target="_blank" rel="noopener">http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html</a></li>
+<li>AWS Resource and Property Types Reference:
+<a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html</a></li>
+<li>Intrinsic Function Reference: <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference.html</a></li>
+<li>Pseudo Parameters Reference: <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/pseudo-parameter-reference.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/pseudo-parameter-reference.html</a></li>
+<li>SSM Parameters as the CloudFormation template parameters:
+<ul>
+<li>Using SSM Parameters with CloudFormation Templates and Terraform Projects: <a href="https://start.jcolemorrison.com/using-ssm-parameters-with-cloudformation-templates-and-terraform-projects/" target="_blank" rel="noopener">https://start.jcolemorrison.com/using-ssm-parameters-with-cloudformation-templates-and-terraform-projects/</a></li>
+<li>Note, that AWS CloudFormation does not support defining template parameters as SecureString Systems Manager parameter types: <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html#aws-ssm-parameter-types" target="_blank" rel="noopener">https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html#aws-ssm-parameter-types</a></li>
+</ul>
+</li>
+<li>Custom Resources:
+<ul>
+<li>AWS Lambda-backed Custom Resources: <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources-lambda.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources-lambda.html</a></li>
+<li>Amazon Simple Notification Service-backed Custom Resources: <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources-sns.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources-sns.html</a></li>
+<li>Amazon S3 presigned URL: <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ShareObjectPreSignedURL.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AmazonS3/latest/dev/ShareObjectPreSignedURL.html</a></li>
+<li>Generate Passwords in AWS CloudFormation Template: <a href="https://www.itonaut.com/2018/01/03/generate-passwords-in-aws-cloudformation-template/" target="_blank" rel="noopener">https://www.itonaut.com/2018/01/03/generate-passwords-in-aws-cloudformation-template/</a></li>
+<li>Source code for my Table Name Generator demo:   <a href="https://github.com/realokun/aws/tree/master/cloudformation" target="_blank" rel="noopener">https://github.com/realokun/aws/tree/master/cloudformation</a></li>
+</ul>
+</li>
+<li>Template quality control:
+<ul>
+<li>TaskCat is an open-source tool that tests AWS CloudFormation templates. It creates stacks in multiple AWS Regions simultaneously and generates a report with a pass/fail grade for each region: <a href="https://aws.amazon.com/blogs/infrastructure-and-automation/up-your-aws-cloudformation-testing-game-using-taskcat/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/infrastructure-and-automation/up-your-aws-cloudformation-testing-game-using-taskcat/</a></li>
+<li>An open-source CloudFormation Linter validates yaml/json templates against the CloudFormation spec and additional checks: <a href="https://github.com/aws-cloudformation/cfn-lint" target="_blank" rel="noopener">https://github.com/aws-cloudformation/cfn-lint</a></li>
+</ul>
+</li>
+<li>Stack Policy Example:</li>
+</ul>
+<pre><code class="json hljs"><div class="wrapper"><div class="gutter linenumber"><span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span></div><div class="code"><span class="token punctuation">{</span>
+  <span class="token property">"Statement"</span> <span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      <span class="token property">"Effect"</span> <span class="token operator">:</span> <span class="token string">"Deny"</span><span class="token punctuation">,</span>
+      <span class="token property">"Action"</span> <span class="token operator">:</span> <span class="token string">"Update:*"</span><span class="token punctuation">,</span>
+      <span class="token property">"Principal"</span><span class="token operator">:</span> <span class="token string">"*"</span><span class="token punctuation">,</span>
+      <span class="token property">"Resource"</span> <span class="token operator">:</span> <span class="token string">"*"</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</div></div></code></pre>
+<p><img class="emoji" alt=":thumbsup:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/thumbsup.png"> Best practices:</p>
+<ul>
+<li>AWS CloudFormation Best Practices: <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/best-practices.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/best-practices.html</a></li>
+</ul>
+<p><img class="emoji" alt=":keyboard:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/keyboard.png"> Hands-on:</p>
+<ul>
+<li>Learn AWS CloudFormation best practices and how to build a Quick Start, the right way: <a href="https://workshop.quickstart.awspartner.com/" target="_blank" rel="noopener">https://workshop.quickstart.awspartner.com/</a></li>
+</ul>
+<p><img class="emoji" alt=":bulb:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/bulb.png"> <strong>See Also</strong></p>
+<ul>
+<li>Idempotency in Infrastructure as Code: <a href="https://skundunotes.com/2019/04/19/idempotency-in-infrastructure-as-code/" target="_blank" rel="noopener">https://skundunotes.com/2019/04/19/idempotency-in-infrastructure-as-code/</a></li>
+<li>TerraForm is a popular cloud-agnostic Infrastructure as Code product from HashiCorp:  <a href="https://www.terraform.io/" target="_blank" rel="noopener">https://www.terraform.io/</a></li>
+<li>CloudFormation extension for Visual Studio Code:
+<a href="https://marketplace.visualstudio.com/items?itemName=aws-scripting-guy.cform" target="_blank" rel="noopener">https://marketplace.visualstudio.com/items?itemName=aws-scripting-guy.cform</a></li>
+</ul>
+<h2 id="-AWS-Cloud-Development-Kit-AWS-CDK" data-id="-AWS-Cloud-Development-Kit-AWS-CDK"><a class="anchor hidden-xs" href="#-AWS-Cloud-Development-Kit-AWS-CDK" title="-AWS-Cloud-Development-Kit-AWS-CDK"><span class="octicon octicon-link"></span></a><img src="https://i.imgur.com/Y38nA57.png" alt="drawing" width="40"> AWS Cloud Development Kit (AWS CDK)</h2>
+<p><img class="emoji" alt=":fire:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/fire.png"> <strong>What’s new?</strong></p>
+<ul>
+<li>AWS Cloud Development Kit (CDK) announces CDK Construct tree view in the AWS CloudFormation console: <a href="https://aws.amazon.com/about-aws/whats-new/2022/09/aws-cloud-development-kit-cdk-announces-cdk-construct-tree-view-cloudformation-console/" target="_blank" rel="noopener">https://aws.amazon.com/about-aws/whats-new/2022/09/aws-cloud-development-kit-cdk-announces-cdk-construct-tree-view-cloudformation-console/</a></li>
+</ul>
+<p><img class="emoji" alt=":sparkles:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/sparkles.png"> <strong>Recommended</strong></p>
+<ul>
+<li>The AWS CDK code is open source and is available through GitHub: <a href="https://github.com/awslabs/aws-cdk" target="_blank" rel="noopener">https://github.com/awslabs/aws-cdk</a>.</li>
+<li>Infrastructure Is Code with the AWS Cloud Development Kit: <a href="https://www.infoq.com/presentations/aws-cdk/" target="_blank" rel="noopener">https://www.infoq.com/presentations/aws-cdk/</a></li>
+<li>AWS CDK Concepts: <a href="https://docs.aws.amazon.com/cdk/latest/guide/core_concepts.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/cdk/latest/guide/core_concepts.html</a></li>
+<li>AWS CDK API Reference: <a href="https://docs.aws.amazon.com/cdk/api/latest/docs/aws-construct-library.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/cdk/api/latest/docs/aws-construct-library.html</a></li>
+<li>A curated list of awesome projects related to the AWS Cloud Development Kit: <a href="https://github.com/eladb/awesome-cdk" target="_blank" rel="noopener">https://github.com/eladb/awesome-cdk</a></li>
+<li>AWS CDK Examples:
+<ul>
+<li><a href="https://github.com/aws-samples/aws-cdk-examples" target="_blank" rel="noopener">https://github.com/aws-samples/aws-cdk-examples</a></li>
+<li><a href="https://docs.aws.amazon.com/cdk/latest/guide/examples.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/cdk/latest/guide/examples.html</a></li>
+</ul>
+</li>
+</ul>
+<p><img class="emoji" alt=":bulb:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/bulb.png"> <strong>See Also</strong></p>
+<ul>
+<li>AWS Solutions Constructs is an open-source extension of the AWS CDK that provides multi-service, well-architected patterns for quickly defining solutions in code to create predictable and repeatable infrastructure: <a href="https://docs.aws.amazon.com/solutions/latest/constructs/welcome.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/solutions/latest/constructs/welcome.html</a></li>
+</ul>
+<p><img class="emoji" alt=":keyboard:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/keyboard.png"> Hands-on:</p>
+<ul>
+<li>AWS CDK Intro Workshop: <a href="https://cdkworkshop.com/" target="_blank" rel="noopener">https://cdkworkshop.com/</a></li>
+</ul>
+</div><div class="embed-note"><h2 id="After-the-course-" data-id="After-the-course-"><a class="anchor hidden-xs" href="#After-the-course-" title="After-the-course-"><span class="octicon octicon-link"></span></a>After the course <img src="https://i.imgur.com/mR60JOu.png" alt="drawing" width="40"></h2>
+<p><img class="emoji" alt=":trophy:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/trophy.png"> Provide your feedback for the course (2 min):</p>
+<ol>
+<li>Navigate to:
+<ul>
+<li>Customers: <a href="https://www.aws.training/Account/Transcript/Archived" target="_blank" rel="noopener">https://www.aws.training/Account/Transcript/Archived</a></li>
+<li>Amazonians: <a href="https://kiku.aws.training/Account/Transcript/Archived" target="_blank" rel="noopener">https://kiku.aws.training/Account/Transcript/Archived</a></li>
+</ul>
+</li>
+<li>Sign in with the same email account you’ve registered for this course.</li>
+<li>Find this course.</li>
+<li>On the right, click Evaluate.</li>
+<li>Provide your feedback.</li>
+</ol>
+<p><img class="emoji" alt=":books:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/books.png"> Continue learning</p>
+<ul>
+<li>Study with AWS:
+<ul>
+<li>AWS Training and Certification learning library: <a href="https://www.aws.training/LearningLibrary" target="_blank" rel="noopener">https://www.aws.training/LearningLibrary</a></li>
+<li>AWS Training and Certification offers free live and on-demand training on Twitch: <a href="https://aws.amazon.com/training/twitch/" target="_blank" rel="noopener">https://aws.amazon.com/training/twitch/</a></li>
+</ul>
+</li>
+<li>Study with AWS partners:
+<ul>
+<li><a href="https://acloud.guru/" target="_blank" rel="noopener">https://acloud.guru/</a></li>
+<li><a href="https://www.whizlabs.com/" target="_blank" rel="noopener">https://www.whizlabs.com/</a></li>
+<li><a href="https://linuxacademy.com/" target="_blank" rel="noopener">https://linuxacademy.com/</a></li>
+<li><a href="https://www.udemy.com/" target="_blank" rel="noopener">https://www.udemy.com/</a></li>
+</ul>
+</li>
+<li>Follow AWS blogs for the best practices in implementing solutions on AWS:
+<ul>
+<li>AWS Compute Blog: <a href="https://aws.amazon.com/blogs/compute/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/compute/</a></li>
+<li>AWS Architecture Blog: <a href="https://aws.amazon.com/blogs/architecture/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/architecture/</a></li>
+<li>AWS Management &amp; Governance Blog: <a href="https://aws.amazon.com/blogs/mt/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/mt/</a></li>
+<li>AWS Infrastructure &amp; Automation Blog: <a href="https://aws.amazon.com/blogs/infrastructure-and-automation/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/infrastructure-and-automation/</a></li>
+<li>AWS DevOps Blog: <a href="https://aws.amazon.com/blogs/devops/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/devops/</a></li>
+<li>AWS Front-End Web &amp; Mobile Blog: <a href="https://aws.amazon.com/blogs/mobile/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/mobile/</a></li>
+<li>and many others: <a href="https://aws.amazon.com/blogs/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/</a></li>
+</ul>
+</li>
+<li>Listen to AWS podcasts
+<ul>
+<li>The Official weekly AWS Podcast: <a href="https://aws.amazon.com/podcasts/aws-podcast/" target="_blank" rel="noopener">https://aws.amazon.com/podcasts/aws-podcast/</a></li>
+<li>AWS Developers Podcast: <a href="https://aws.amazon.com/developer/podcast/?developer-podcast" target="_blank" rel="noopener">https://aws.amazon.com/developer/podcast/?developer-podcast</a></li>
+<li>AWS TechChat: <a href="https://aws.amazon.com/podcasts/aws-techchat/" target="_blank" rel="noopener">https://aws.amazon.com/podcasts/aws-techchat/</a></li>
+</ul>
+</li>
+<li>Stay up-to-date with AWS news:
+<ul>
+<li>What’s New with AWS - learn about the latest product, service, and feature announcements from AWS. <a href="https://aws.amazon.com/new/" target="_blank" rel="noopener">https://aws.amazon.com/new/</a></li>
+<li>Read AWS news blog: <a href="https://aws.amazon.com/blogs/aws" target="_blank" rel="noopener">https://aws.amazon.com/blogs/aws</a></li>
+<li>Read AWS Training and Certification Blog: <a href="https://aws.amazon.com/blogs/training-and-certification/" target="_blank" rel="noopener">https://aws.amazon.com/blogs/training-and-certification/</a></li>
+</ul>
+</li>
+<li>Beginning on Thursday, January 28, 2021 the AWS Dev Hour: Building Modern Applications series will offer developers a hands-on approach to deepen their AWS knowledge in a fun, live, and interactive environment: <a href="https://pages.awscloud.com/traincert-twitch-dev-hour.html" target="_blank" rel="noopener">https://pages.awscloud.com/traincert-twitch-dev-hour.html</a></li>
+<li>AWS Stash, searchable historical database of the videos released by AWS at public events: <a href="https://awsstash.com/" target="_blank" rel="noopener">https://awsstash.com/</a></li>
+<li>AWS on Twitch: <a href="https://www.twitch.tv/aws" target="_blank" rel="noopener">https://www.twitch.tv/aws</a></li>
+</ul>
+<p><img src="https://i.imgur.com/czoSB43.png" alt="drawing" width="35"> Get AWS Certification</p>
+<ul>
+<li>15 Top-Paying IT Certifications, updated annually: <a href="https://www.globalknowledge.com/us-en/resources/resource-library/articles/top-paying-certifications/" target="_blank" rel="noopener">https://www.globalknowledge.com/us-en/resources/resource-library/articles/top-paying-certifications/</a></li>
+<li>Prepare for Your AWS Certification Exam: <a href="https://aws.amazon.com/certification/certification-prep/" target="_blank" rel="noopener">https://aws.amazon.com/certification/certification-prep/</a></li>
+<li>Take free digital self-paced AWS Certification Exam Readiness training: <a href="https://www.aws.training/LearningLibrary?filters=digital%3A1&amp;filters=language%3A1&amp;search=Exam%20Readiness&amp;tab=view_all" target="_blank" rel="noopener">https://www.aws.training/LearningLibrary?filters=digital%3A1&amp;filters=language%3A1&amp;search=Exam Readiness&amp;tab=view_all</a></li>
+</ul>
+<p><img class="emoji" alt=":thumbsup:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/thumbsup.png"> Learn from the Best Practices, Reference Architectures and Case Studies</p>
+<ul>
+<li>AWS Well-Architected | Learn, measure, and build using architectural best practices: <a href="https://aws.amazon.com/architecture/well-architected/" target="_blank" rel="noopener">https://aws.amazon.com/architecture/well-architected/</a></li>
+<li>AWS Prescriptive Guidance | Resources from AWS and APN Partners to help accelerate cloud adoption and modernization: <a href="https://aws.amazon.com/prescriptive-guidance/" target="_blank" rel="noopener">https://aws.amazon.com/prescriptive-guidance/</a></li>
+<li>The Amazon Builders’ Library | How Amazon builds and operates software: <a href="https://aws.amazon.com/builders-library/" target="_blank" rel="noopener">https://aws.amazon.com/builders-library/</a></li>
+<li>This Is My Architecture | Innovative cloud architectures from AWS partners and customers: <a href="https://aws.amazon.com/this-is-my-architecture/" target="_blank" rel="noopener">https://aws.amazon.com/this-is-my-architecture/</a></li>
+<li>AWS Quick Starts | Automated, gold-standard deployments in the AWS Cloud: <a href="https://aws.amazon.com/quickstart/" target="_blank" rel="noopener">https://aws.amazon.com/quickstart/</a></li>
+<li>AWS Customer Success Stories: <a href="https://aws.amazon.com/solutions/case-studies/" target="_blank" rel="noopener">https://aws.amazon.com/solutions/case-studies/</a></li>
+<li>How Netflix works:
+<a href="https://media.netflix.com/en/company-blog/how-netflix-works-with-isps-around-the-globe-to-deliver-a-great-viewing-experience" target="_blank" rel="noopener">https://media.netflix.com/en/company-blog/how-netflix-works-with-isps-around-the-globe-to-deliver-a-great-viewing-experience</a></li>
+</ul>
+<p><img class="emoji" alt=":keyboard:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/keyboard.png"> Get hands-on experience</p>
+<ul>
+<li>Get started with simple step-by-step tutorials to launch your first AWS workload: <a href="https://aws.amazon.com/getting-started/hands-on/" target="_blank" rel="noopener">https://aws.amazon.com/getting-started/hands-on/</a></li>
+<li><img class="emoji" alt=":cake:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/cake.png"> Workshops - hands-on events designed to teach or introduce practical skills, techniques, or concepts which you can use to solve business problems:
+<ul>
+<li>Collection of AWS workshops maintained by AWS: <a href="https://workshops.aws/" target="_blank" rel="noopener">https://workshops.aws/</a></li>
+<li>Collection of AWS security workshops maintained by AWS:  <a href="https://awssecworkshops.com/workshops/" target="_blank" rel="noopener">https://awssecworkshops.com/workshops/</a></li>
+<li>Collection of AWS workshops found around in the internet: <a href="https://awesome-aws-workshops.com/" target="_blank" rel="noopener">https://awesome-aws-workshops.com/</a></li>
+<li>Mythical Mysfits: <a href="https://www.mythicalmysfits.com/" target="_blank" rel="noopener">https://www.mythicalmysfits.com/</a></li>
+</ul>
+</li>
+<li>Practice with the Qwiklabs, requires to purchase credits: <a href="https://amazon.qwiklabs.com/" target="_blank" rel="noopener">https://amazon.qwiklabs.com/</a></li>
+</ul>
+<p><img class="emoji" alt=":wave:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/wave.png"> Get expert guidance and assistance</p>
+<ul>
+<li>AWS IQ - hire the AWS Certified third-party experts for the on-demand project work:&nbsp;<a href="https://iq.aws.amazon.com/" target="_blank" rel="noopener">https://iq.aws.amazon.com/</a></li>
+<li>AWS Support - choose an AWS Support plan: <a href="https://aws.amazon.com/premiumsupport/plans/" target="_blank" rel="noopener">https://aws.amazon.com/premiumsupport/plans/</a></li>
+</ul>
+<p><img class="emoji" alt=":art:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/art.png"> Misc useful resources</p>
+<ul>
+<li>AWS Architecture Icons, the official AWS icon set for building architecture diagrams: <a href="https://aws.amazon.com/architecture/icons/" target="_blank" rel="noopener">https://aws.amazon.com/architecture/icons/</a></li>
+<li><a href="http://Draw.io" target="_blank" rel="noopener">Draw.io</a>, free AWS Diagram Tool: <a href="https://www.draw.io/?splash=0&amp;libs=aws4" target="_blank" rel="noopener">https://www.draw.io/?splash=0&amp;libs=aws4</a></li>
+</ul>
+</div></div>
+    <div class="ui-toc dropup unselectable hidden-print" style="display:none;">
+        <div class="pull-right dropdown">
+            <a id="tocLabel" class="ui-toc-label btn btn-default" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Table of content">
+                <i class="fa fa-bars"></i>
+            </a>
+            <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
+                <div class="toc"><ul class="nav">
+<li><a href="#Security-Engineering-on-AWS---Resources" title="Security Engineering on AWS - Resources">Security Engineering on AWS - Resources</a><ul class="nav">
+<li><a href="#-About" title=" About"> About</a></li>
+<li><a href="#-Introduction-to-Security-on-AWS" title=" Introduction to Security on AWS"> Introduction to Security on AWS</a></li>
+<li><a href="#-Introduction-to-DevOps-on-AWS" title=" Introduction to DevOps on AWS"> Introduction to DevOps on AWS</a></li>
+<li><a href="#-Developer’s-toolset" title=" Developer’s toolset"> Developer’s toolset</a></li>
+<li><a href="#-AWS-Identity-and-Access-Management-IAM" title=" AWS Identity and Access Management (IAM)"> AWS Identity and Access Management (IAM)</a></li>
+<li><a href="#-Application-Security" title=" Application Security"> Application Security</a></li>
+<li><a href="#-Data-Security" title=" Data Security"> Data Security</a></li>
+<li><a href="#-Network-Security" title=" Network Security"> Network Security</a><ul class="nav">
+<li><a href="#Hybrid-Environments" title="Hybrid Environments">Hybrid Environments</a></li>
+</ul>
+</li>
+<li><a href="#-Security-at-Edge" title=" Security at Edge"> Security at Edge</a></li>
+<li><a href="#-Amazon-Cognito" title=" Amazon Cognito"> Amazon Cognito</a></li>
+<li><a href="#-Infrastructure-Automation" title=" Infrastructure Automation"> Infrastructure Automation</a></li>
+<li><a href="#-AWS-CloudFormation" title=" AWS CloudFormation"> AWS CloudFormation</a></li>
+<li><a href="#-AWS-Cloud-Development-Kit-AWS-CDK" title=" AWS Cloud Development Kit (AWS CDK)"> AWS Cloud Development Kit (AWS CDK)</a></li>
+<li><a href="#After-the-course-" title="After the course ">After the course </a></li>
+</ul>
+</li>
+</ul>
+</div><div class="toc-menu"><a class="expand-toggle" href="#">Expand all</a><a class="back-to-top" href="#">Back to top</a><a class="go-to-bottom" href="#">Go to bottom</a></div>
+            </ul>
+        </div>
+    </div>
+    <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print" data-spy="affix" style="top:17px;display:none;" null null>
+        <div class="toc"><ul class="nav">
+<li><a href="#Security-Engineering-on-AWS---Resources" title="Security Engineering on AWS - Resources">Security Engineering on AWS - Resources</a><ul class="nav">
+<li><a href="#-About" title=" About"> About</a></li>
+<li><a href="#-Introduction-to-Security-on-AWS" title=" Introduction to Security on AWS"> Introduction to Security on AWS</a></li>
+<li><a href="#-Introduction-to-DevOps-on-AWS" title=" Introduction to DevOps on AWS"> Introduction to DevOps on AWS</a></li>
+<li><a href="#-Developer’s-toolset" title=" Developer’s toolset"> Developer’s toolset</a></li>
+<li><a href="#-AWS-Identity-and-Access-Management-IAM" title=" AWS Identity and Access Management (IAM)"> AWS Identity and Access Management (IAM)</a></li>
+<li><a href="#-Application-Security" title=" Application Security"> Application Security</a></li>
+<li><a href="#-Data-Security" title=" Data Security"> Data Security</a></li>
+<li><a href="#-Network-Security" title=" Network Security"> Network Security</a><ul class="nav">
+<li><a href="#Hybrid-Environments" title="Hybrid Environments">Hybrid Environments</a></li>
+</ul>
+</li>
+<li><a href="#-Security-at-Edge" title=" Security at Edge"> Security at Edge</a></li>
+<li><a href="#-Amazon-Cognito" title=" Amazon Cognito"> Amazon Cognito</a></li>
+<li><a href="#-Infrastructure-Automation" title=" Infrastructure Automation"> Infrastructure Automation</a></li>
+<li><a href="#-AWS-CloudFormation" title=" AWS CloudFormation"> AWS CloudFormation</a></li>
+<li><a href="#-AWS-Cloud-Development-Kit-AWS-CDK" title=" AWS Cloud Development Kit (AWS CDK)"> AWS Cloud Development Kit (AWS CDK)</a></li>
+<li><a href="#After-the-course-" title="After the course ">After the course </a></li>
+</ul>
+</li>
+</ul>
+</div><div class="toc-menu"><a class="expand-toggle" href="#">Expand all</a><a class="back-to-top" href="#">Back to top</a><a class="go-to-bottom" href="#">Go to bottom</a></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gist-embed/2.6.0/gist-embed.min.js" integrity="sha256-KyF2D6xPIJUW5sUDSs93vWyZm+1RzIpKCexxElmxl8g=" crossorigin="anonymous" defer></script>
+    <script>
+        var markdown = $(".markdown-body");
+        //smooth all hash trigger scrolling
+        function smoothHashScroll() {
+            var hashElements = $("a[href^='#']").toArray();
+            for (var i = 0; i < hashElements.length; i++) {
+                var element = hashElements[i];
+                var $element = $(element);
+                var hash = element.hash;
+                if (hash) {
+                    $element.on('click', function (e) {
+                        // store hash
+                        var hash = this.hash;
+                        if ($(hash).length <= 0) return;
+                        // prevent default anchor click behavior
+                        e.preventDefault();
+                        // animate
+                        $('body, html').stop(true, true).animate({
+                            scrollTop: $(hash).offset().top
+                        }, 100, "linear", function () {
+                            // when done, add hash to url
+                            // (default click behaviour)
+                            window.location.hash = hash;
+                        });
+                    });
+                }
+            }
+        }
+
+        smoothHashScroll();
+        var toc = $('.ui-toc');
+        var tocAffix = $('.ui-affix-toc');
+        var tocDropdown = $('.ui-toc-dropdown');
+        //toc
+        tocDropdown.click(function (e) {
+            e.stopPropagation();
+        });
+
+        var enoughForAffixToc = true;
+
+        function generateScrollspy() {
+            $(document.body).scrollspy({
+                target: ''
+            });
+            $(document.body).scrollspy('refresh');
+            if (enoughForAffixToc) {
+                toc.hide();
+                tocAffix.show();
+            } else {
+                tocAffix.hide();
+                toc.show();
+            }
+            $(document.body).scroll();
+        }
+
+        function windowResize() {
+            //toc right
+            var paddingRight = parseFloat(markdown.css('padding-right'));
+            var right = ($(window).width() - (markdown.offset().left + markdown.outerWidth() - paddingRight));
+            toc.css('right', right + 'px');
+            //affix toc left
+            var newbool;
+            var rightMargin = (markdown.parent().outerWidth() - markdown.outerWidth()) / 2;
+            //for ipad or wider device
+            if (rightMargin >= 133) {
+                newbool = true;
+                var affixLeftMargin = (tocAffix.outerWidth() - tocAffix.width()) / 2;
+                var left = markdown.offset().left + markdown.outerWidth() - affixLeftMargin;
+                tocAffix.css('left', left + 'px');
+            } else {
+                newbool = false;
+            }
+            if (newbool != enoughForAffixToc) {
+                enoughForAffixToc = newbool;
+                generateScrollspy();
+            }
+        }
+        $(window).resize(function () {
+            windowResize();
+        });
+        $(document).ready(function () {
+            windowResize();
+            generateScrollspy();
+        });
+
+        //remove hash
+        function removeHash() {
+            window.location.hash = '';
+        }
+
+        var backtotop = $('.back-to-top');
+        var gotobottom = $('.go-to-bottom');
+
+        backtotop.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (scrollToTop)
+                scrollToTop();
+            removeHash();
+        });
+        gotobottom.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (scrollToBottom)
+                scrollToBottom();
+            removeHash();
+        });
+
+        var toggle = $('.expand-toggle');
+        var tocExpand = false;
+
+        checkExpandToggle();
+        toggle.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            tocExpand = !tocExpand;
+            checkExpandToggle();
+        })
+
+        function checkExpandToggle () {
+            var toc = $('.ui-toc-dropdown .toc');
+            var toggle = $('.expand-toggle');
+            if (!tocExpand) {
+                toc.removeClass('expand');
+                toggle.text('Expand all');
+            } else {
+                toc.addClass('expand');
+                toggle.text('Collapse all');
+            }
+        }
+
+        function scrollToTop() {
+            $('body, html').stop(true, true).animate({
+                scrollTop: 0
+            }, 100, "linear");
+        }
+
+        function scrollToBottom() {
+            $('body, html').stop(true, true).animate({
+                scrollTop: $(document.body)[0].scrollHeight
+            }, 100, "linear");
+        }
+    </script>
+</body>
+
+</html>

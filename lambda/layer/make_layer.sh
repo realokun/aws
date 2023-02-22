@@ -12,5 +12,6 @@
 mkdir python
 # Install the packages you need, e.g.
 pip3 install pyshorteners -t python/
+pip3 install shortuuid -t python/
 # Create ZIP archive containing python directory
 zip -r py_layer.zip python/
