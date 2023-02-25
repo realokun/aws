@@ -1,0 +1,17 @@
+#EXTM3U
+#EXT-X-VERSION:6
+#EXT-X-TARGETDURATION:31
+#EXT-X-MEDIA-SEQUENCE:1
+#EXT-X-PLAYLIST-TYPE:VOD
+#EXT-X-MAP:URI="beachday_Ott_Cmaf_Cmfc_Aac_He_96Kbpsinit.cmfa"
+#EXTINF:30,
+beachday_Ott_Cmaf_Cmfc_Aac_He_96Kbps_000000001.cmfa
+#EXTINF:30,
+beachday_Ott_Cmaf_Cmfc_Aac_He_96Kbps_000000002.cmfa
+#EXTINF:30,
+beachday_Ott_Cmaf_Cmfc_Aac_He_96Kbps_000000003.cmfa
+#EXTINF:30,
+beachday_Ott_Cmaf_Cmfc_Aac_He_96Kbps_000000004.cmfa
+#EXTINF:1,
+beachday_Ott_Cmaf_Cmfc_Aac_He_96Kbps_000000005.cmfa
+#EXT-X-ENDLIST
